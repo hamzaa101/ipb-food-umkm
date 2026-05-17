@@ -1,62 +1,87 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
+import AuthLayout from '../layouts/AuthLayout';
 
 export default function Login() {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(false); // To simulate error state
+  // const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulasi login sukses, arahkan ke halaman utama
-    navigate('/dashboard');
+    // Simulate login error for demonstration
+    setError(true);
+    // navigate('/dashboard');
   };
 
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-[#0F172A] p-6 flex flex-col justify-center">
-      
-      {/* Card Form */}
-      <div className="bg-white rounded-4xl p-8 shadow-xl">
-        <h1 className="text-2xl font-bold text-[#243D67] mb-6">Masuk</h1>
-        
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          <input 
-            type="tel" 
-            placeholder="Nomor Telepon" 
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#FF9746] text-sm"
-            required
-          />
-          
-          <div className="relative">
-            <input 
-              type={showPassword ? "text" : "password"} 
-              placeholder="Kata Sandi" 
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#FF9746] text-sm pr-10"
-              required
+    <AuthLayout>
+      <div className="flex flex-col gap-6">
+        <h1 className="text-[32px] font-bold text-secondary">Masuk</h1>
+
+        <form onSubmit={handleLogin} className="flex flex-col gap-5">
+          {/* Phone Input */}
+          <div>
+            <input
+              type="tel"
+              placeholder="Nomor Telepon"
+              className="w-full px-4 py-3.5 rounded-xl border border-border-light bg-surface-light text-text-primary-light placeholder:text-text-muted-light focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
             />
-            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-3.5 text-gray-400">
-              {showPassword ? "👁️" : "🙈"}
+          </div>
+
+          {/* Password Input */}
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Kata Sandi"
+              className="w-full pl-4 pr-12 py-3.5 rounded-xl border border-border-light bg-surface-light text-text-primary-light placeholder:text-text-muted-light focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted-light hover:text-text-secondary-light transition-colors"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
 
-          <div className="flex items-center gap-2 mt-1">
-            <input type="checkbox" id="ingat-saya" className="w-4 h-4 accent-[#FF9746] rounded border-gray-300" />
-            <label htmlFor="ingat-saya" className="text-sm text-gray-500">Ingat saya</label>
+          {/* Remember Me */}
+          <div className="flex items-center gap-2">
+            <input 
+              type="checkbox" 
+              id="remember" 
+              className="w-5 h-5 rounded-sm border-border-light text-primary focus:ring-primary accent-primary"
+            />
+            <label htmlFor="remember" className="text-text-secondary-light text-sm">
+              ingat saya
+            </label>
           </div>
 
-          <button 
+          {/* Submit Button */}
+          <button
             type="submit"
-            className="w-full py-3.5 mt-2 bg-[#FF9746] hover:bg-[#FF7F2A] text-white font-semibold rounded-xl transition-colors"
+            className="w-full mt-2 py-3.5 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl text-lg transition-colors"
           >
             Masuk
           </button>
+
+          {/* Error Message (Conditional) */}
+          {error && (
+            <p className="text-danger text-sm text-center leading-snug">
+              Nomor telepon atau kata sandi anda salah,<br />silahkan coba lagi
+            </p>
+          )}
+
+          {/* Register Link */}
+          <p className="text-center text-text-secondary-light text-sm mt-2">
+            Belum punya akun?{' '}
+            <Link to="/register/role" className="font-semibold text-secondary hover:underline">
+              Daftar
+            </Link>
+          </p>
         </form>
-
-        <p className="text-center text-sm mt-6 text-gray-500">
-          Belum punya akun? <Link to="/register" className="text-[#243D67] font-bold">Daftar</Link>
-        </p>
       </div>
-
-      <div className="text-center mt-6 text-white/50 font-semibold text-sm">IPB Food Hub</div>
-    </div>
+    </AuthLayout>
   );
 }
