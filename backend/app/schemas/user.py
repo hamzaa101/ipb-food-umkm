@@ -38,3 +38,22 @@ class SellerResponse(UserResponse):
     close_time: Optional[time] = None
     address: Optional[str] = None
     verification_status: str
+
+class UserLogin(BaseModel):
+    phone_number: str
+    password: str
+
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+    )
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+    )
