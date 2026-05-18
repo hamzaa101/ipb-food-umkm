@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Search, MapPin, Bell } from 'lucide-react';
 
 export default function Dashboard() {
