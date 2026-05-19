@@ -1,61 +1,94 @@
-import { useState } from 'react';
-import { Search, MapPin, Bell } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import MainLayout from '../layouts/MainLayout';
+import Header from '../components/dashboard/Header';
+import PromoCarousel from '../components/dashboard/PromoCarousel';
+import SearchBar from '../components/dashboard/SearchBar';
+import CategoryTabs from '../components/dashboard/CategoryTabs';
+import UMKMCard from '../components/dashboard/UMKMCard';
+
+import ProfileMenu from '../components/popups/ProfileMenu';
+import NotificationMenu from '../components/popups/NotificationMenu';
+import LogoutConfirmModal from '../components/popups/LogoutConfirmModal';
+import CategoryDropdown from '../components/popups/CategoryDropdown';
+import AreaDropdown from '../components/popups/AreaDropdown';
+import { dummyUMKM } from '../utils/dummyData';
+import { useDisclosure } from '../hooks/useDisclosure';
 
 export default function Dashboard() {
-  // Data simulasi (dummy) sebelum integrasi ke backend
-  const [products] = useState([
-    { id: '1', name: 'Nasi Goreng Spesial', price: 15000, sellerName: 'Kantin Stevia' },
-    { id: '2', name: 'Ayam Geprek', price: 12000, sellerName: 'Kantin Nona' },
-    { id: '3', name: 'Es Teh Manis', price: 4000, sellerName: 'Kantin Stevia' },
-  ]);
+  const navigate = useNavigate();
+  
+  // Popup States
+  const profileMenu = useDisclosure();
+  const notifMenu = useDisclosure();
+  const logoutModal = useDisclosure();
+  const categoryDropdown = useDisclosure();
+  const areaDropdown = useDisclosure();
+
+  const handleLogoutConfirm = () => {
+    logoutModal.close();
+    // Add real logout logic here later (clear tokens, etc)
+    navigate('/login');
+  };
 
   return (
-    <div className="pb-20 max-w-md mx-auto bg-gray-50 min-h-screen">
-      {/* Header Info */}
-      <div className="bg-white p-4 shadow-sm sticky top-0 z-10 flex justify-between items-center">
-        <div>
-          <p className="text-xs text-gray-500">Lokasi Anda</p>
-          <div className="flex items-center text-blue-600 font-medium text-sm">
-            <MapPin className="w-4 h-4 mr-1" />
-            <span>FEMA, IPB Dramaga</span>
+    <MainLayout>
+      <Header 
+        onOpenProfile={profileMenu.open}
+        onOpenNotification={notifMenu.open}
+      />
+
+      <div className="flex-1 overflow-y-auto bg-surface-light relative">
+        <PromoCarousel />
+        
+        <SearchBar />
+        
+        <div className="sticky top-0 z-30 bg-surface-light">
+          <div className="relative">
+            <CategoryTabs 
+              onOpenJenis={categoryDropdown.open} 
+              onOpenArea={areaDropdown.open}
+            />
+            <CategoryDropdown 
+              isOpen={categoryDropdown.isOpen} 
+              onClose={categoryDropdown.close} 
+            />
+            <AreaDropdown 
+              isOpen={areaDropdown.isOpen} 
+              onClose={areaDropdown.close} 
+            />
           </div>
         </div>
-        <button className="p-2 relative bg-gray-100 rounded-full text-gray-600">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-        </button>
-      </div>
 
-      {/* Search Bar */}
-      <div className="p-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Cari makanan atau kantin..."
-            className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
-          />
-        </div>
-      </div>
-
-      {/* Produk List */}
-      <div className="p-4 pt-0">
-        <h2 className="font-bold text-gray-800 mb-3 text-lg">Rekomendasi Menu</h2>
-        <div className="grid grid-cols-2 gap-4">
-          {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-              <div className="h-24 bg-gray-200 w-full animate-pulse"></div>
-              <div className="p-3">
-                <h3 className="font-semibold text-gray-800 text-sm truncate">{product.name}</h3>
-                <p className="text-xs text-gray-500 mt-1">{product.sellerName}</p>
-                <div className="mt-2 text-blue-600 font-bold text-sm">
-                  Rp{product.price.toLocaleString('id-ID')}
-                </div>
+        {/* UMKM List */}
+        <div className="pb-8">
+          <h2 className="px-4 font-bold text-secondary text-lg mb-3">Rekomendasi Kantin</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
+            {dummyUMKM.map((umkm) => (
+              <div key={umkm.id} className="rounded-2xl overflow-hidden shadow-sm border border-border-light">
+                <UMKMCard data={umkm} />
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Absolute/Fixed Popups */}
+      <ProfileMenu 
+        isOpen={profileMenu.isOpen} 
+        onClose={profileMenu.close} 
+        onLogoutClick={logoutModal.open}
+      />
+      
+      <NotificationMenu 
+        isOpen={notifMenu.isOpen} 
+        onClose={notifMenu.close} 
+      />
+
+      <LogoutConfirmModal 
+        isOpen={logoutModal.isOpen}
+        onClose={logoutModal.close}
+        onConfirm={handleLogoutConfirm}
+      />
+    </MainLayout>
   );
 }
