@@ -4,7 +4,6 @@ from typing import List, Optional
 
 from app.models.user import User, Seller, Buyer, SellerStatus
 from app.models.product import Product
-from app.models.order import Order
 from app.repositories.base import BaseRepository
 
 class UserRepository(BaseRepository[User]):
@@ -33,8 +32,4 @@ class UserRepository(BaseRepository[User]):
 
     async def count_products(self, db: AsyncSession) -> int:
         result = await db.scalar(select(func.count(Product.id)))
-        return result or 0
-
-    async def count_orders(self, db: AsyncSession) -> int:
-        result = await db.scalar(select(func.count(Order.id)))
         return result or 0
