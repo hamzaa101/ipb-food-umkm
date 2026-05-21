@@ -1,0 +1,50 @@
+import { XCircle } from 'lucide-react';
+
+interface DeleteAccountModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}
+
+export default function DeleteAccountModal({ isOpen, onClose, onConfirm }: DeleteAccountModalProps) {
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={onClose}>
+        <div 
+          className="bg-white rounded-3xl w-full max-w-[320px] p-6 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-200"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4">
+            <XCircle size={64} className="text-danger" strokeWidth={2} />
+          </div>
+          
+          <h2 className="text-xl font-bold text-secondary mb-2">Hapus Akun?</h2>
+          
+          <p className="text-sm text-text-secondary-light mb-6">
+            Kamu harus mendaftar kembali untuk menggunakan Food HUB
+          </p>
+          
+          <div className="flex gap-3 w-full">
+            <button 
+              onClick={onClose}
+              className="flex-1 bg-surface-200 text-secondary font-bold py-3 rounded-xl hover:bg-border-light transition-colors"
+            >
+              Kembali
+            </button>
+            <button 
+              onClick={() => {
+                onConfirm();
+                onClose();
+              }}
+              className="flex-1 bg-danger text-white font-bold py-3 rounded-xl hover:bg-red-600 transition-colors"
+            >
+              Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
