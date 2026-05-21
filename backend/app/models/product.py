@@ -1,7 +1,7 @@
 from sqlalchemy import String, Double, Float, ForeignKey, Boolean, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 import uuid
-from models.base import Base
+from app.models.base import Base
 
 class Product(Base):
     __tablename__ = "products"

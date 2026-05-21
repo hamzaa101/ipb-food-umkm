@@ -4,7 +4,7 @@ import uuid
 import enum
 from typing import List, Optional, TYPE_CHECKING
 from datetime import time
-from models.base import Base, CoordinateMixin
+from app.models.base import Base, CoordinateMixin
 
 if TYPE_CHECKING:
     from .product import Product
