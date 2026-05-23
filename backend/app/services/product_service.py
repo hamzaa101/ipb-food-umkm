@@ -12,6 +12,26 @@ class ProductService:
     async def get_products(self, db: AsyncSession, seller_id: Optional[str] = None) -> List[Product]:
         return await self.product_repo.get_products(db, seller_id)
 
+    async def search_products(
+        self,
+        db: AsyncSession,
+        query: Optional[str] = None,
+        category: Optional[str] = None,
+        seller_address: Optional[str] = None,
+        seller_name: Optional[str] = None,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> List[Product]:
+        return await self.product_repo.search_products(
+            db,
+            query=query,
+            category=category,
+            seller_address=seller_address,
+            seller_name=seller_name,
+            limit=limit,
+            offset=offset,
+        )
+
     async def get_product_by_id(self, db: AsyncSession, product_id: str) -> Optional[Product]:
         return await self.product_repo.get_product_by_id(db, product_id)
 

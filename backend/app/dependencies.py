@@ -5,8 +5,10 @@ from fastapi import Header, HTTPException, Depends
 from app.db.database import AsyncSessionLocal
 from app.repositories.user_repository import UserRepository
 from app.repositories.product_repository import ProductRepository
+from app.repositories.promo_repository import PromoRepository
 from app.services.user_service import UserService
 from app.services.product_service import ProductService
+from app.services.promo_service import PromoService
 from app.core.security import decode_access_token
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
@@ -24,6 +26,12 @@ def get_user_service(repo: UserRepository = Depends(get_user_repository)) -> Use
 
 def get_product_service(repo: ProductRepository = Depends(get_product_repository)) -> ProductService:
     return ProductService(repo)
+
+def get_promo_repository() -> PromoRepository:
+    return PromoRepository()
+
+def get_promo_service(repo: PromoRepository = Depends(get_promo_repository)) -> PromoService:
+    return PromoService(repo)
 
 async def get_current_user(
     db: AsyncSession = Depends(get_db),
