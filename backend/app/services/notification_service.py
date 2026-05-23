@@ -18,5 +18,7 @@ class NotificationService:
             return None
         return await self.notification_repo.update(db, db_obj=notification, obj_in={"is_read": True})
 
-    async def create_notification(self, db: AsyncSession, data: NotificationCreate) -> Notification:
+    async def create_notification(self, db: AsyncSession, data: NotificationCreate | dict) -> Notification:
+        if isinstance(data, dict):
+            data = NotificationCreate(**data)
         return await self.notification_repo.create(db, obj_in=data.model_dump())

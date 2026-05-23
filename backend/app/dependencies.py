@@ -8,11 +8,15 @@ from app.repositories.product_repository import ProductRepository
 from app.repositories.promo_repository import PromoRepository
 from app.repositories.cart_repository import CartRepository
 from app.repositories.notification_repository import NotificationRepository
+from app.repositories.location_repository import LocationRepository
+from app.repositories.seller_application_repository import SellerApplicationRepository
 from app.services.user_service import UserService
 from app.services.product_service import ProductService
 from app.services.promo_service import PromoService
 from app.services.cart_service import CartService
 from app.services.notification_service import NotificationService
+from app.services.location_service import LocationService
+from app.services.seller_application_service import SellerApplicationService
 from app.core.security import decode_access_token
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
@@ -42,6 +46,18 @@ def get_cart_repository() -> CartRepository:
     return CartRepository()
 
 
+def get_location_repository() -> LocationRepository:
+    return LocationRepository()
+
+
+def get_location_service(repo: LocationRepository = Depends(get_location_repository)) -> LocationService:
+    return LocationService(repo)
+
+
+def get_seller_application_repository() -> SellerApplicationRepository:
+    return SellerApplicationRepository()
+
+
 def get_cart_service(repo: CartRepository = Depends(get_cart_repository)) -> CartService:
     return CartService(repo)
 
@@ -52,6 +68,14 @@ def get_notification_repository() -> NotificationRepository:
 
 def get_notification_service(repo: NotificationRepository = Depends(get_notification_repository)) -> NotificationService:
     return NotificationService(repo)
+
+
+def get_seller_application_service(
+    repo: SellerApplicationRepository = Depends(get_seller_application_repository),
+    location_repo: LocationRepository = Depends(get_location_repository),
+    notification_service: NotificationService = Depends(get_notification_service),
+) -> SellerApplicationService:
+    return SellerApplicationService(repo, location_repo, notification_service)
 
 async def get_current_user(
     db: AsyncSession = Depends(get_db),

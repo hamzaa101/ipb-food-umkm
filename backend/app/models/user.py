@@ -35,5 +35,9 @@ class Seller(User, CoordinateMixin):
     id: Mapped[str] = mapped_column(String, ForeignKey("users.id"), primary_key=True)
     store_name: Mapped[str] = mapped_column(String(100), nullable=False)
     address: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    store_image_url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    verification_status: Mapped[SellerStatus] = mapped_column(Enum(SellerStatus), default=SellerStatus.PENDING)
+    open_time: Mapped[Optional[time]] = mapped_column(Time, nullable=True)
+    close_time: Mapped[Optional[time]] = mapped_column(Time, nullable=True)
     products: Mapped[List["Product"]] = relationship("Product", back_populates="seller")
     __mapper_args__ = {"polymorphic_identity": "seller"}
