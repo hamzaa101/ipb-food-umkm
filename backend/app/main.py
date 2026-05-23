@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import products, auth, users, promos
+from app.routers import products, auth, users, promos, cart, notifications
 
 app = FastAPI(title="IPB Food & UMKM Student Hub")
 
@@ -18,6 +18,8 @@ app.include_router(products.router, prefix="/api/products", tags=["products"])
 app.include_router(promos.router, prefix="/api/promos", tags=["promos"])
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(users.router, prefix="/api/users", tags=["users"])
+app.include_router(cart.router, prefix="/api/cart", tags=["cart"])
+app.include_router(notifications.router, prefix="/api/notifications", tags=["notifications"])
 
 @app.get("/")
 async def root():

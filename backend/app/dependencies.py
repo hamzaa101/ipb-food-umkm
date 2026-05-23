@@ -6,9 +6,13 @@ from app.db.database import AsyncSessionLocal
 from app.repositories.user_repository import UserRepository
 from app.repositories.product_repository import ProductRepository
 from app.repositories.promo_repository import PromoRepository
+from app.repositories.cart_repository import CartRepository
+from app.repositories.notification_repository import NotificationRepository
 from app.services.user_service import UserService
 from app.services.product_service import ProductService
 from app.services.promo_service import PromoService
+from app.services.cart_service import CartService
+from app.services.notification_service import NotificationService
 from app.core.security import decode_access_token
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
@@ -32,6 +36,22 @@ def get_promo_repository() -> PromoRepository:
 
 def get_promo_service(repo: PromoRepository = Depends(get_promo_repository)) -> PromoService:
     return PromoService(repo)
+
+
+def get_cart_repository() -> CartRepository:
+    return CartRepository()
+
+
+def get_cart_service(repo: CartRepository = Depends(get_cart_repository)) -> CartService:
+    return CartService(repo)
+
+
+def get_notification_repository() -> NotificationRepository:
+    return NotificationRepository()
+
+
+def get_notification_service(repo: NotificationRepository = Depends(get_notification_repository)) -> NotificationService:
+    return NotificationService(repo)
 
 async def get_current_user(
     db: AsyncSession = Depends(get_db),

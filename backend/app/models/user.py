@@ -21,6 +21,7 @@ class User(Base):
     phone_number: Mapped[str] = mapped_column(String(20), nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     user_type: Mapped[str] = mapped_column(String(50), nullable=False)
+    profile_image_url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     __mapper_args__ = {"polymorphic_identity": "user", "polymorphic_on": "user_type"}
 
 class Buyer(User, CoordinateMixin):
@@ -33,5 +34,6 @@ class Seller(User, CoordinateMixin):
     __tablename__ = "sellers"
     id: Mapped[str] = mapped_column(String, ForeignKey("users.id"), primary_key=True)
     store_name: Mapped[str] = mapped_column(String(100), nullable=False)
+    address: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     products: Mapped[List["Product"]] = relationship("Product", back_populates="seller")
     __mapper_args__ = {"polymorphic_identity": "seller"}
