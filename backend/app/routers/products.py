@@ -13,6 +13,6 @@ async def read_products(
     db: AsyncSession = Depends(get_db),
     product_service: ProductService = Depends(get_product_service)
 ):
-    # Mengambil semua list produk secara default untuk halaman dashboard
+    
     products = await product_service.get_products(db)
     return products

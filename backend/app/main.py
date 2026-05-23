@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import products
+from app.routers import products, auth
 
 app = FastAPI(title="IPB Food & UMKM Student Hub")
 
@@ -15,6 +15,7 @@ app.add_middleware(
 
 # Hanya meregistrasikan router products untuk Sprint 1
 app.include_router(products.router, prefix="/api/products", tags=["products"])
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 
 @app.get("/")
 async def root():

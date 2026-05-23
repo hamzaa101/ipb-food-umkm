@@ -3,6 +3,9 @@ from typing import List, Optional
 
 from app.models.user import Seller, SellerStatus
 from app.repositories.user_repository import UserRepository
+from app.core.security import hash_password, verify_password, create_access_token
+from app.schemas.user import UserCreate
+from app.models.user import Buyer
 
 class UserService:
     def __init__(self, user_repo: UserRepository):
@@ -32,3 +35,43 @@ class UserService:
             "total_buyers": total_buyers,
             "total_products": total_products
         }
+
+    async def register_user(self, db: AsyncSession, user_create: UserCreate):
+        existing = await self.user_repo.get_by_phone(db, user_create.phone_number)
+        if existing:
+            raise ValueError("Phone number already registered")
+
+        hashed = hash_password(user_create.password)
+        if user_create.user_type == "seller":
+            user_obj = Seller(
+                name=user_create.name,
+                phone_number=user_create.phone_number,
+                password=hashed,
+                user_type="seller",
+                store_name=getattr(user_create, "store_name", ""),
+                address=getattr(user_create, "address", None),
+            )
+        else:
+            user_obj = Buyer(
+                name=user_create.name,
+                phone_number=user_create.phone_number,
+                password=hashed,
+                user_type="buyer",
+            )
+
+        return await self.user_repo.create_user(db, user_obj)
+
+    async def authenticate_user(self, db: AsyncSession, phone_number: str, password: str):
+        user = await self.user_repo.get_by_phone(db, phone_number)
+        if not user:
+            return None
+        if not verify_password(password, user.password):
+            return None
+        return user
+
+    def create_access_token(self, data: dict, expires_minutes: int | None = None) -> str:
+        if expires_minutes:
+            from datetime import timedelta
+
+            return create_access_token(data, expires_delta=timedelta(minutes=expires_minutes))
+        return create_access_token(data)

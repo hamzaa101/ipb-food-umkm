@@ -33,3 +33,15 @@ class UserRepository(BaseRepository[User]):
     async def count_products(self, db: AsyncSession) -> int:
         result = await db.scalar(select(func.count(Product.id)))
         return result or 0
+
+    async def get_by_phone(self, db: AsyncSession, phone_number: str) -> Optional[User]:
+        result = await db.execute(
+            select(User).where(User.phone_number == phone_number)
+        )
+        return result.scalars().first()
+
+    async def create_user(self, db: AsyncSession, user_obj: User) -> User:
+        db.add(user_obj)
+        await db.commit()
+        await db.refresh(user_obj)
+        return user_obj
