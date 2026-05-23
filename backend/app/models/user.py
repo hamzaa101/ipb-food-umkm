@@ -26,6 +26,7 @@ class User(Base):
 class Buyer(User, CoordinateMixin):
     __tablename__ = "buyers"
     id: Mapped[str] = mapped_column(String, ForeignKey("users.id"), primary_key=True)
+    address: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     __mapper_args__ = {"polymorphic_identity": "buyer"}
 
 class Seller(User, CoordinateMixin):

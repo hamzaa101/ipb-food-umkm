@@ -6,6 +6,7 @@ from datetime import time
 class UserBase(BaseModel):
     name: str
     phone_number: str
+    address: Optional[str] = None
 
     model_config = ConfigDict(
         alias_generator=to_camel,
@@ -16,6 +17,15 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
     user_type: str
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    address: Optional[str] = None
+
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+    )
 
 class BuyerCreate(UserCreate):
     user_type: str = "buyer"

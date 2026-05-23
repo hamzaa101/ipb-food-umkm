@@ -57,6 +57,7 @@ class UserService:
                 phone_number=user_create.phone_number,
                 password=hashed,
                 user_type="buyer",
+                address=getattr(user_create, "address", None),
             )
 
         return await self.user_repo.create_user(db, user_obj)
@@ -68,6 +69,12 @@ class UserService:
         if not verify_password(password, user.password):
             return None
         return user
+
+    async def get_user_by_id(self, db: AsyncSession, user_id: str):
+        return await self.user_repo.get(db, user_id)
+
+    async def update_user(self, db: AsyncSession, user, updates: dict):
+        return await self.user_repo.update(db, db_obj=user, obj_in=updates)
 
     def create_access_token(self, data: dict, expires_minutes: int | None = None) -> str:
         if expires_minutes:
