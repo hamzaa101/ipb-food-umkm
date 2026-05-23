@@ -76,6 +76,22 @@ class UserService:
     async def update_user(self, db: AsyncSession, user, updates: dict):
         return await self.user_repo.update(db, db_obj=user, obj_in=updates)
 
+    async def change_password(self, db: AsyncSession, user, current_password: str, new_password: str) -> bool:
+        if not verify_password(current_password, user.password):
+            return False
+        user.password = hash_password(new_password)
+        await db.commit()
+        await db.refresh(user)
+        return True
+
+    async def delete_user(self, db: AsyncSession, user, password: str) -> bool:
+        # verify password before deletion
+        if not verify_password(password, user.password):
+            return False
+        # use repository delete
+        deleted = await self.user_repo.delete(db, id=user.id)
+        return deleted is not None
+
     def create_access_token(self, data: dict, expires_minutes: int | None = None) -> str:
         if expires_minutes:
             from datetime import timedelta

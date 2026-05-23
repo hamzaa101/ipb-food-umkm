@@ -61,6 +61,25 @@ class UserLogin(BaseModel):
     )
 
 
+class PasswordChangeRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+    )
+
+
+class DeleteAccountRequest(BaseModel):
+    password: str
+
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+    )
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
