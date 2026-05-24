@@ -2,17 +2,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Optional
 
-from app.models.location import Location
+from app.models.location import Location as LocationModel
+from app.domain.location import LocationDomain
+from app.domain.mappers import Mapper
 from app.repositories.base import BaseRepository
 
-class LocationRepository(BaseRepository[Location]):
-    def __init__(self):
-        super().__init__(Location)
+class LocationRepository(BaseRepository[LocationDomain, LocationModel]):
+    def __init__(self, db: AsyncSession):
+        super().__init__(LocationDomain, LocationModel, db)
 
-    async def get_all(self, db: AsyncSession) -> List[Location]:
-        result = await db.execute(select(Location).order_by(Location.name))
-        return list(result.scalars().all())
-
-    async def get_by_id(self, db: AsyncSession, location_id: str) -> Optional[Location]:
-        result = await db.execute(select(Location).where(Location.id == location_id))
-        return result.scalars().first()
+    async def get_all(self) -> List[LocationDomain]:
+        result = await self.db.execute(select(LocationModel).order_by(LocationModel.name))
+        return [Mapper.to_domain(loc, LocationDomain) for loc in result.scalars().all()]

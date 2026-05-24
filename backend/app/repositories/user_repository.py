@@ -2,46 +2,49 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from typing import List, Optional
 
-from app.models.user import User, Seller, Buyer, SellerStatus
-from app.models.product import Product
+from app.models.user import User as UserModel, Seller as SellerModel, Buyer as BuyerModel, SellerStatus
+from app.models.product import Product as ProductModel
+from app.domain.user import UserDomain, SellerDomain, BuyerDomain
 from app.repositories.base import BaseRepository
+from app.domain.mappers import Mapper
 
-class UserRepository(BaseRepository[User]):
-    def __init__(self):
-        super().__init__(User)
+class UserRepository(BaseRepository[UserDomain, UserModel]):
+    def __init__(self, db: AsyncSession):
+        super().__init__(UserDomain, UserModel, db)
 
-    async def get_sellers_by_status(self, db: AsyncSession, status: SellerStatus) -> List[Seller]:
-        result = await db.execute(
-            select(Seller).where(Seller.verification_status == status)
+    async def get_sellers_by_status(self, status: SellerStatus) -> List[SellerDomain]:
+        result = await self.db.execute(
+            select(SellerModel).where(SellerModel.verification_status == status)
         )
-        return list(result.scalars().all())
+        sellers = result.scalars().all()
+        return [Mapper.to_domain(s, SellerDomain) for s in sellers]
 
-    async def get_seller_by_id(self, db: AsyncSession, seller_id: str) -> Optional[Seller]:
-        result = await db.execute(
-            select(Seller).where(Seller.id == seller_id)
+    async def get_seller_by_id(self, seller_id: str) -> Optional[SellerDomain]:
+        result = await self.db.execute(
+            select(SellerModel).where(SellerModel.id == seller_id)
         )
-        return result.scalars().first()
+        seller = result.scalars().first()
+        return Mapper.to_domain(seller, SellerDomain) if seller else None
 
-    async def count_sellers(self, db: AsyncSession) -> int:
-        result = await db.scalar(select(func.count(Seller.id)))
+    async def count_sellers(self) -> int:
+        result = await self.db.scalar(select(func.count(SellerModel.id)))
         return result or 0
 
-    async def count_buyers(self, db: AsyncSession) -> int:
-        result = await db.scalar(select(func.count(Buyer.id)))
+    async def count_buyers(self) -> int:
+        result = await self.db.scalar(select(func.count(BuyerModel.id)))
         return result or 0
 
-    async def count_products(self, db: AsyncSession) -> int:
-        result = await db.scalar(select(func.count(Product.id)))
+    async def count_products(self) -> int:
+        result = await self.db.scalar(select(func.count(ProductModel.id)))
         return result or 0
 
-    async def get_by_phone(self, db: AsyncSession, phone_number: str) -> Optional[User]:
-        result = await db.execute(
-            select(User).where(User.phone_number == phone_number)
+    async def get_by_phone(self, phone_number: str) -> Optional[UserDomain]:
+        result = await self.db.execute(
+            select(UserModel).where(UserModel.phone_number == phone_number)
         )
-        return result.scalars().first()
-
-    async def create_user(self, db: AsyncSession, user_obj: User) -> User:
-        db.add(user_obj)
-        await db.commit()
-        await db.refresh(user_obj)
-        return user_obj
+        user = result.scalars().first()
+        if not user:
+            return None
+        if user.user_type == "seller":
+            return Mapper.to_domain(user, SellerDomain)
+        return Mapper.to_domain(user, BuyerDomain)
