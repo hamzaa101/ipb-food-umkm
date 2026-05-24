@@ -1,34 +1,35 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
 
-from app.models.user import Seller, SellerStatus
+from app.domain.user import SellerDomain, BuyerDomain, UserDomain
+from app.models.user import SellerStatus
 from app.repositories.user_repository import UserRepository
 from app.core.security import hash_password, verify_password, create_access_token
 from app.schemas.user import UserCreate
-from app.models.user import Buyer
 
 class UserService:
     def __init__(self, user_repo: UserRepository):
         self.user_repo = user_repo
 
-    async def get_seller_list(self, db: AsyncSession) -> List[Seller]:
-        return await self.user_repo.get_sellers_by_status(db, SellerStatus.ACTIVE)
+    async def get_seller_list(self) -> List[SellerDomain]:
+        return await self.user_repo.get_sellers_by_status(SellerStatus.ACTIVE)
 
-    async def get_seller_by_id(self, db: AsyncSession, seller_id: str) -> Optional[Seller]:
-        return await self.user_repo.get_seller_by_id(db, seller_id)
+    async def get_seller_by_id(self, seller_id: str) -> Optional[SellerDomain]:
+        return await self.user_repo.get_seller_by_id(seller_id)
 
-    async def verify_seller(self, db: AsyncSession, seller_id: str, status: SellerStatus) -> Optional[Seller]:
-        seller = await self.user_repo.get_seller_by_id(db, seller_id)
+    async def verify_seller(self, seller_id: str, status: SellerStatus) -> Optional[SellerDomain]:
+        seller = await self.user_repo.get_seller_by_id(seller_id)
         if seller:
-            seller.verification_status = status
-            await db.commit()
-            await db.refresh(seller)
+            if status == SellerStatus.ACTIVE:
+                seller.verify()
+            elif status == SellerStatus.REJECTED:
+                seller.reject()
+            await self.user_repo.update(seller)
         return seller
 
-    async def get_dashboard_stats(self, db: AsyncSession) -> dict:
-        total_sellers = await self.user_repo.count_sellers(db)
-        total_buyers = await self.user_repo.count_buyers(db)
-        total_products = await self.user_repo.count_products(db)
+    async def get_dashboard_stats(self) -> dict:
+        total_sellers = await self.user_repo.count_sellers()
+        total_buyers = await self.user_repo.count_buyers()
+        total_products = await self.user_repo.count_products()
 
         return {
             "total_sellers": total_sellers,
@@ -36,14 +37,14 @@ class UserService:
             "total_products": total_products
         }
 
-    async def register_user(self, db: AsyncSession, user_create: UserCreate):
-        existing = await self.user_repo.get_by_phone(db, user_create.phone_number)
+    async def register_user(self, user_create: UserCreate):
+        existing = await self.user_repo.get_by_phone(user_create.phone_number)
         if existing:
             raise ValueError("Phone number already registered")
 
         hashed = hash_password(user_create.password)
         if user_create.user_type == "seller":
-            user_obj = Seller(
+            user_domain = SellerDomain(
                 name=user_create.name,
                 phone_number=user_create.phone_number,
                 password=hashed,
@@ -52,7 +53,7 @@ class UserService:
                 address=getattr(user_create, "address", None),
             )
         else:
-            user_obj = Buyer(
+            user_domain = BuyerDomain(
                 name=user_create.name,
                 phone_number=user_create.phone_number,
                 password=hashed,
@@ -60,41 +61,42 @@ class UserService:
                 address=getattr(user_create, "address", None),
             )
 
-        return await self.user_repo.create_user(db, user_obj)
+        created_user = await self.user_repo.save(user_domain)
+        return created_user
 
-    async def authenticate_user(self, db: AsyncSession, phone_number: str, password: str):
-        user = await self.user_repo.get_by_phone(db, phone_number)
+    async def authenticate_user(self, phone_number: str, password: str):
+        user = await self.user_repo.get_by_phone(phone_number)
         if not user:
             return None
         if not verify_password(password, user.password):
             return None
         return user
 
-    async def get_user_by_id(self, db: AsyncSession, user_id: str):
-        return await self.user_repo.get(db, user_id)
+    async def get_user_by_id(self, user_id: str):
+        return await self.user_repo.get_by_id(user_id)
 
-    async def update_user(self, db: AsyncSession, user, updates: dict):
-        return await self.user_repo.update(db, db_obj=user, obj_in=updates)
+    async def update_user(self, user: UserDomain, updates: dict):
+        for key, value in updates.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+        updated_user = await self.user_repo.update(user)
+        return updated_user
 
-    async def change_password(self, db: AsyncSession, user, current_password: str, new_password: str) -> bool:
+    async def change_password(self, user: UserDomain, current_password: str, new_password: str) -> bool:
         if not verify_password(current_password, user.password):
             return False
         user.password = hash_password(new_password)
-        await db.commit()
-        await db.refresh(user)
+        await self.user_repo.update(user)
         return True
 
-    async def delete_user(self, db: AsyncSession, user, password: str) -> bool:
-        # verify password before deletion
+    async def delete_user(self, user: UserDomain, password: str) -> bool:
         if not verify_password(password, user.password):
             return False
-        # use repository delete
-        deleted = await self.user_repo.delete(db, id=user.id)
-        return deleted is not None
+        await self.user_repo.delete(user)
+        return True
 
     def create_access_token(self, data: dict, expires_minutes: int | None = None) -> str:
         if expires_minutes:
             from datetime import timedelta
-
             return create_access_token(data, expires_delta=timedelta(minutes=expires_minutes))
         return create_access_token(data)
