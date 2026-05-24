@@ -8,6 +8,7 @@ from app.models.base import Base, CoordinateMixin
 
 if TYPE_CHECKING:
     from .product import Product
+    from .order import Order
 
 class SellerStatus(enum.Enum):
     PENDING = "pending"
@@ -22,6 +23,7 @@ class User(Base):
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     user_type: Mapped[str] = mapped_column(String(50), nullable=False)
     profile_image_url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    orders: Mapped[List["Order"]] = relationship("Order", foreign_keys="Order.user_id", back_populates="user")
     __mapper_args__ = {"polymorphic_identity": "user", "polymorphic_on": "user_type"}
 
 class Buyer(User, CoordinateMixin):

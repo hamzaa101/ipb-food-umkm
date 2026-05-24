@@ -22,6 +22,7 @@ import app.models.cart
 import app.models.notification
 import app.models.location
 import app.models.seller_application
+import app.models.order
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -41,7 +42,7 @@ def run_migrations_offline() -> None:
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
-        compare_type=True,
+        compare_type=False,
     )
 
     with context.begin_transaction():
@@ -49,7 +50,7 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)
+    context.configure(connection=connection, target_metadata=target_metadata, compare_type=False)
 
     with context.begin_transaction():
         context.run_migrations()

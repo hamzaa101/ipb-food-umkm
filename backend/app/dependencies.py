@@ -10,6 +10,7 @@ from app.repositories.cart_repository import CartRepository
 from app.repositories.notification_repository import NotificationRepository
 from app.repositories.location_repository import LocationRepository
 from app.repositories.seller_application_repository import SellerApplicationRepository
+from app.repositories.order_repository import OrderRepository
 from app.services.user_service import UserService
 from app.services.product_service import ProductService
 from app.services.promo_service import PromoService
@@ -17,6 +18,7 @@ from app.services.cart_service import CartService
 from app.services.notification_service import NotificationService
 from app.services.location_service import LocationService
 from app.services.seller_application_service import SellerApplicationService
+from app.services.order_service import OrderService
 from app.core.security import decode_access_token
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
@@ -76,6 +78,12 @@ def get_seller_application_service(
     notification_service: NotificationService = Depends(get_notification_service),
 ) -> SellerApplicationService:
     return SellerApplicationService(repo, location_repo, notification_service)
+
+def get_order_repository() -> OrderRepository:
+    return OrderRepository()
+
+def get_order_service(repo: OrderRepository = Depends(get_order_repository)) -> OrderService:
+    return OrderService(repo)
 
 async def get_current_user(
     db: AsyncSession = Depends(get_db),
