@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, Query
-from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
 
-from app.dependencies import get_db, get_product_service
+from app.dependencies import get_product_service
 from app.services.product_service import ProductService
 from app.schemas.product import ProductResponse
 
@@ -16,11 +15,9 @@ async def read_products(
     seller_name: Optional[str] = Query(None, description="Filter by seller/store name"),
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
-    db: AsyncSession = Depends(get_db),
     product_service: ProductService = Depends(get_product_service),
 ):
     products = await product_service.search_products(
-        db,
         query=q,
         category=category,
         seller_address=seller_address,
