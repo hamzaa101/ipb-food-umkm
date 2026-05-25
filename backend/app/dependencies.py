@@ -11,6 +11,7 @@ from app.repositories.notification_repository import NotificationRepository
 from app.repositories.location_repository import LocationRepository
 from app.repositories.seller_application_repository import SellerApplicationRepository
 from app.repositories.order_repository import OrderRepository
+
 from app.services.user_service import UserService
 from app.services.product_service import ProductService
 from app.services.promo_service import PromoService
@@ -25,65 +26,64 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
         yield session
 
-def get_user_repository() -> UserRepository:
-    return UserRepository()
+# Repositories
+def get_user_repository(db: AsyncSession = Depends(get_db)) -> UserRepository:
+    return UserRepository(db)
 
-def get_product_repository() -> ProductRepository:
-    return ProductRepository()
+def get_product_repository(db: AsyncSession = Depends(get_db)) -> ProductRepository:
+    return ProductRepository(db)
 
+def get_promo_repository(db: AsyncSession = Depends(get_db)) -> PromoRepository:
+    return PromoRepository(db)
+
+def get_cart_repository(db: AsyncSession = Depends(get_db)) -> CartRepository:
+    return CartRepository(db)
+
+def get_location_repository(db: AsyncSession = Depends(get_db)) -> LocationRepository:
+    return LocationRepository(db)
+
+def get_seller_application_repository(db: AsyncSession = Depends(get_db)) -> SellerApplicationRepository:
+    return SellerApplicationRepository(db)
+
+def get_notification_repository(db: AsyncSession = Depends(get_db)) -> NotificationRepository:
+    return NotificationRepository(db)
+
+def get_order_repository(db: AsyncSession = Depends(get_db)) -> OrderRepository:
+    return OrderRepository(db)
+
+# Services
 def get_user_service(repo: UserRepository = Depends(get_user_repository)) -> UserService:
     return UserService(repo)
 
 def get_product_service(repo: ProductRepository = Depends(get_product_repository)) -> ProductService:
     return ProductService(repo)
 
-def get_promo_repository() -> PromoRepository:
-    return PromoRepository()
-
 def get_promo_service(repo: PromoRepository = Depends(get_promo_repository)) -> PromoService:
     return PromoService(repo)
-
-
-def get_cart_repository() -> CartRepository:
-    return CartRepository()
-
-
-def get_location_repository() -> LocationRepository:
-    return LocationRepository()
-
-
-def get_location_service(repo: LocationRepository = Depends(get_location_repository)) -> LocationService:
-    return LocationService(repo)
-
-
-def get_seller_application_repository() -> SellerApplicationRepository:
-    return SellerApplicationRepository()
-
 
 def get_cart_service(repo: CartRepository = Depends(get_cart_repository)) -> CartService:
     return CartService(repo)
 
-
-def get_notification_repository() -> NotificationRepository:
-    return NotificationRepository()
-
-
-def get_notification_service(repo: NotificationRepository = Depends(get_notification_repository)) -> NotificationService:
-    return NotificationService(repo)
-
+def get_location_service(repo: LocationRepository = Depends(get_location_repository)) -> LocationService:
+    return LocationService(repo)
 
 def get_seller_application_service(
     repo: SellerApplicationRepository = Depends(get_seller_application_repository),
     location_repo: LocationRepository = Depends(get_location_repository),
-    notification_service: NotificationService = Depends(get_notification_service),
+    notification_repo: NotificationRepository = Depends(get_notification_repository),
 ) -> SellerApplicationService:
-    return SellerApplicationService(repo, location_repo, notification_service)
+    return SellerApplicationService(repo, location_repo, notification_repo)
 
-def get_order_repository() -> OrderRepository:
-    return OrderRepository()
+def get_notification_service(repo: NotificationRepository = Depends(get_notification_repository)) -> NotificationService:
+    return NotificationService(repo)
 
-def get_order_service(repo: OrderRepository = Depends(get_order_repository)) -> OrderService:
-    return OrderService(repo)
+def get_order_service(
+    order_repo: OrderRepository = Depends(get_order_repository),
+    cart_repo: CartRepository = Depends(get_cart_repository),
+    product_repo: ProductRepository = Depends(get_product_repository),
+    user_repo: UserRepository = Depends(get_user_repository)
+) -> OrderService:
+    return OrderService(order_repo, cart_repo, product_repo, user_repo)
 
 async def get_current_user(
     db: AsyncSession = Depends(get_db),
@@ -103,7 +103,8 @@ async def get_current_user(
     if not user_id:
         raise HTTPException(status_code=401, detail="Invalid token payload")
 
-    user = await UserRepository().get(db, user_id)
+    user_repo = UserRepository(db)
+    user = await user_repo.get_by_id(user_id)
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
     return user
