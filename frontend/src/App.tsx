@@ -1,30 +1,50 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Welcome from './pages/Welcome';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { CartProvider } from './context/CartContext';
+
+// Import Pages
+import Onboarding from './pages/Onboarding';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import SelectRole from './pages/SelectRole';
-import RegisterSuccess from './pages/RegisterSuccess';
 import Dashboard from './pages/Dashboard';
-import { CartProvider } from './contexts/CartContext';
+import Profile from './pages/Profile';
+import ChangePassword from './pages/ChangePassword';
+import RegisterStore from './pages/RegisterStore';
+import StoreDetail from './pages/StoreDetail';
+import Cart from './pages/Cart';
+import OrderHistory from './pages/OrderHistory';
+import OrderDetail from './pages/OrderDetail';
+import Rating from './pages/Rating';
 
-export default function App() {
+const App: React.FC = () => {
+  // Guard Desktop dihapus! Aplikasi sekarang otomatis membiarkan pengguna lewat.
+  // Responsivitas ditangani oleh masing-masing halaman CSS (seperti Grid auto-fit).
+
   return (
-    <BrowserRouter>
-      <CartProvider>
+    <CartProvider>
+      <Router>
         <Routes>
-          {/* Halaman pertama kali aplikasi dibuka */}
-          <Route path="/" element={<Welcome />} />
-
-          {/* Rute Autentikasi */}
+          <Route path="/" element={<Onboarding />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/register/role" element={<SelectRole />} />
-          <Route path="/register/success" element={<RegisterSuccess />} />
-
-          {/* Halaman Utama setelah Login */}
+          
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/register-store" element={<RegisterStore />} />
+
+          <Route path="/store/:id" element={<StoreDetail />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/history" element={<OrderHistory />} />
+          <Route path="/order/:id" element={<OrderDetail />} /> 
+          <Route path="/rating/:id" element={<Rating />} /> 
+
+          {/* Fallback ke home jika rute tidak ditemukan */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </CartProvider>
-    </BrowserRouter>
+      </Router>
+    </CartProvider>
   );
-}
+};
+
+export default App;

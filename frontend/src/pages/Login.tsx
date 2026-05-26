@@ -1,87 +1,83 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
-import AuthLayout from '../layouts/AuthLayout';
+import React, { useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/Auth.css';
 
-export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(false); // To simulate error state
-  // const navigate = useNavigate();
+// Tambahkan React.FC
+const Login: React.FC = () => {
+  const navigate = useNavigate();
+  // Tambahkan <boolean> pada state
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Tambahkan tipe FormEvent<HTMLFormElement> pada parameter (e)
+  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Simulate login error for demonstration
-    setError(true);
-    // navigate('/dashboard');
+    // Jika login berhasil, arahkan ke dashboard
+    navigate('/dashboard'); 
   };
 
   return (
-    <AuthLayout>
-      <div className="flex flex-col gap-6">
-        <h1 className="text-[32px] font-bold text-secondary">Masuk</h1>
-
-        <form onSubmit={handleLogin} className="flex flex-col gap-5">
-          {/* Phone Input */}
-          <div>
-            <input
-              type="tel"
-              placeholder="Nomor Telepon"
-              className="w-full px-4 py-3.5 rounded-xl border border-border-light bg-surface-light text-text-primary-light placeholder:text-text-muted-light focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+    <div className="auth-layout">
+      <div className="auth-card">
+        <h1 className="auth-title">Masuk</h1>
+        
+        <form className="auth-form" onSubmit={handleLogin}>
+          <div className="input-wrapper">
+            <input 
+              type="text" 
+              placeholder="Nomor Telepon" 
+              className={`auth-input ${isError ? 'is-error' : ''}`} 
             />
           </div>
 
-          {/* Password Input */}
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Kata Sandi"
-              className="w-full pl-4 pr-12 py-3.5 rounded-xl border border-border-light bg-surface-light text-text-primary-light placeholder:text-text-muted-light focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+          <div className="input-wrapper">
+            <input 
+              type={showPassword ? "text" : "password"} 
+              placeholder="Kata Sandi" 
+              className={`auth-input ${isError ? 'is-error' : ''}`} 
             />
-            <button
-              type="button"
+            <button 
+              type="button" 
+              className="password-toggle" 
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted-light hover:text-text-secondary-light transition-colors"
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {/* Simple Eye Icon SVG */}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                {showPassword ? (
+                  <>
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </>
+                ) : (
+                  <>
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </>
+                )}
+              </svg>
             </button>
           </div>
 
-          {/* Remember Me */}
-          <div className="flex items-center gap-2">
-            <input 
-              type="checkbox" 
-              id="remember" 
-              className="w-5 h-5 rounded-sm border-border-light text-primary focus:ring-primary accent-primary"
-            />
-            <label htmlFor="remember" className="text-text-secondary-light text-sm">
-              ingat saya
-            </label>
-          </div>
+          <label className="remember-me">
+            <input type="checkbox" />
+            <span>ingat saya</span>
+          </label>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full mt-2 py-3.5 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl text-lg transition-colors"
-          >
-            Masuk
-          </button>
-
-          {/* Error Message (Conditional) */}
-          {error && (
-            <p className="text-danger text-sm text-center leading-snug">
-              Nomor telepon atau kata sandi anda salah,<br />silahkan coba lagi
-            </p>
+          <button type="submit" className="btn-submit">Masuk</button>
+          
+          {isError && (
+            <p className="error-text">Nomor telepon atau kata sandi anda salah, silahkan coba lagi</p>
           )}
-
-          {/* Register Link */}
-          <p className="text-center text-text-secondary-light text-sm mt-2">
-            Belum punya akun?{' '}
-            <Link to="/register/role" className="font-semibold text-secondary hover:underline">
-              Daftar
-            </Link>
-          </p>
         </form>
+
+        <p className="auth-link-text">
+          Belum punya akun? <span className="auth-link" onClick={() => navigate('/register')}>Daftar</span>
+        </p>
       </div>
-    </AuthLayout>
+
+      <div className="auth-footer-logo">IPB Food Hub</div>
+    </div>
   );
-}
+};
+
+export default Login;

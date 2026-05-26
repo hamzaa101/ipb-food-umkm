@@ -1,0 +1,175 @@
+/* Container Utama Layar Penuh */
+.auth-layout {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-main, #0F172A);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+}
+
+/* Card Putih */
+.auth-card {
+  background-color: var(--bg-surface, #FFFFFF);
+  width: 100%;
+  max-width: 400px;
+  border-radius: 24px;
+  padding: 40px 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.auth-title {
+  color: var(--text-primary, #243D67);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+/* Form & Input */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid var(--border-color, #9CA3AF);
+  border-radius: 12px;
+  font-size: 1rem;
+  color: var(--text-primary, #243D67);
+  background-color: transparent;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-input::placeholder {
+  color: var(--text-muted, #9CA3AF);
+}
+
+.auth-input:focus {
+  border-color: var(--color-primary, #FF9746);
+}
+
+/* State Error */
+.auth-input.is-error {
+  border-color: var(--color-danger, #EF4444);
+}
+
+.error-text {
+  color: var(--color-danger, #EF4444);
+  font-size: 0.8rem;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.error-text-left {
+  color: var(--color-danger, #EF4444);
+  font-size: 0.8rem;
+  margin-top: 4px;
+  text-align: left;
+}
+
+/* Tombol Show/Hide Password */
+.password-toggle {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted, #9CA3AF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Checkbox Ingat Saya */
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted, #9CA3AF);
+  font-size: 0.9rem;
+}
+
+/* Tombol Submit */
+.btn-submit {
+  background-color: var(--color-primary, #FF9746);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.auth-link-text {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #6B7280);
+  margin-top: 24px;
+}
+
+.auth-link {
+  color: var(--text-primary, #243D67);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Teks Bawah */
+.auth-footer-logo {
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  font-weight: 700;
+  position: absolute;
+  bottom: 40px;
+}
+
+/* Success State */
+.success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  background-color: var(--color-success, #22C55E);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.success-title {
+  color: var(--text-primary, #243D67);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.success-subtitle {
+  color: var(--text-secondary, #6B7280);
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}

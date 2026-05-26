@@ -1,0 +1,247 @@
+/* --- CONTAINER UTAMA --- */
+.onboarding-page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-main, #0F172A); /* Fallback */
+  overflow: hidden;
+  position: relative;
+}
+
+/* --- TAMPILAN DESKTOP SPECIFIC --- */
+
+/* Mengatur background image full screen di desktop */
+.onboarding-page.is-desktop {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Overlay biru pekat agar teks pop-out (sesuai desain) */
+.desktop-dark-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.8) 40%, rgba(15, 23, 42, 1) 70%);
+  z-index: 1;
+}
+
+.desktop-view {
+  display: flex;
+  max-width: 1200px; /* Dilebarkan agar tidak sempit */
+  width: 100%;
+  padding: 40px 60px;
+  gap: 80px; /* Jarak antara gambar dan teks diperlebar */
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Logo/Judul di Desktop */
+.desktop-app-logo {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  font-weight: 700;
+  z-index: 3; /* Harus lebih tinggi dari z-index overlay */
+  letter-spacing: 0.5px;
+}
+
+.desktop-mockups {
+  display: flex;
+  gap: 24px;
+  flex: 1; /* Menggunakan flex untuk proporsi dinamis */
+  justify-content: flex-end;
+}
+
+.desktop-mockups img {
+  width: 240px;
+  height: auto;
+  border-radius: 24px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+  object-fit: contain;
+}
+
+.desktop-text {
+  flex: 1.2; /* Area teks diberi porsi lebih besar dibanding gambar */
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.desktop-text h1 {
+  font-size: 3rem; /* Sedikit dibesarkan agar proporsional */
+  margin-bottom: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.desktop-text p {
+  font-size: 1.15rem;
+  color: #CBD5F5;
+  margin-bottom: 0px; /* Diubah jadi 0 agar jarak dengan tombol diatur oleh wrapper tombol */
+  line-height: 1.6;
+  max-width: 100%; /* Menjaga agar teks deskripsi tidak terlalu melebar ke tepi */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.desktop-warning-text {
+  font-weight: bold;
+}
+
+/* --- TAMBAHAN UNTUK TOMBOL DI DESKTOP --- */
+
+/* Wadah pembungkus tombol agar di tengah-tengah teks desktop */
+.desktop-action-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px; /* Memberi jarak ke atas (ke teks deskripsi) */
+}
+
+/* Mengatur lebar spesifik untuk susunan tombol mobile di layar desktop */
+.desktop-view .action-section {
+  width: 320px; /* Memberikan lebar spesifik agar tombol tidak memanjang ujung-ke-ujung */
+}
+
+/* Memastikan tombol di desktop memiliki lebar penuh dari wadah spesifik di atas */
+.desktop-view .action-section .btn-primary,
+.desktop-view .action-section .btn-outline {
+  width: 100%;
+}
+
+/* --- TAMPILAN MOBILE --- */
+.mobile-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Agar konten teks dan tombol otomatis ke tengah */
+}
+
+.mobile-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%; /* Gambar makanan hanya mengambil bagian atas */
+  object-fit: cover;
+  z-index: 0;
+}
+
+.mobile-gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Sesuai layer Figma: Gradient linear dari transparan ke warna solid dark */
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.8) 40%, rgba(15, 23, 42, 1) 70%);
+  z-index: 1;
+}
+
+.mobile-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  max-width: 480px; /* BATASAN dipindah ke sini agar konten tetap rapi seukuran HP */
+  padding: 24px;
+  justify-content: space-between;
+}
+
+.app-logo-text {
+  text-align: center;
+  color: #FFFFFF;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.bottom-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.text-section {
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.text-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.text-section p {
+  font-size: 1rem;
+  color: var(--text-secondary, #CBD5F5);
+  line-height: 1.5;
+}
+
+.action-section {
+  display: flex;
+  max-width: 480px;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Tombol Masuk */
+.btn-primary {
+  background-color: var(--color-primary, #FF9746);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  padding: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:active {
+  background-color: var(--color-primary-hover, #FF7F2A);
+}
+
+/* Divider "Atau" */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #FFFFFF;
+  font-size: 0.9rem;
+}
+
+.divider::before, .divider::after {
+  content: "";
+  height: 1px;
+  width: 40px;
+  background-color: var(--border-color, #334155);
+}
+
+/* Tombol Daftar */
+.btn-outline {
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 1.5px solid #FFFFFF;
+  border-radius: 999px;
+  padding: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}

@@ -1,55 +1,21 @@
-@import 'tailwindcss';
+/* src/index.css */
 
-@theme {
-  /* Typography */
-  --font-sans: 'Inter', system-ui, sans-serif;
-
-  /* Colors based on Design System */
-  --color-primary: #FF9746;
-  --color-primary-hover: #FF7F2A;
-  --color-secondary: #243D67;
-  --color-accent: #FFB800;
-  --color-success: #22C55E;
-  --color-danger: #EF4444;
-
-  /* Light Mode Tokens (Default) */
-  --color-bg-light: #FFFFFF;
-  --color-surface-light: #FFFFFF;
-  --color-surface-200: #F8F9FB;
-  --color-border-light: #E6E8EC;
-  --color-divider-light: #F1F2F6;
-
-  --color-text-primary-light: #243D67;
-  --color-text-secondary-light: #6B7280;
-  --color-text-muted-light: #9CA3AF;
-  --color-text-on-primary: #FFFFFF;
-
-  /* Dark Mode Tokens (App Background is Dark) */
-  --color-bg-dark: #0F172A;
-  --color-surface-dark: #1E293B;
-  --color-surface-secondary-dark: #334155;
-  --color-border-dark: #334155;
-  --color-divider-dark: #475569;
-
-  --color-text-primary-dark: #F8FAFC;
-  --color-text-secondary-dark: #CBD5F5;
-  --color-text-muted-dark: #94A3B8;
-}
-
-/* Global Reset */
-html, body {
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: var(--font-sans);
-  background-color: var(--color-bg-dark);
-  color: var(--color-text-primary-dark);
 }
 
-#root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+body {
+  /* Ganti 'Inter' dengan nama font dari Figma kamu */
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-main, #0F172A);
+  color: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Jika kamu menggunakan tombol atau input, mereka kadang tidak mewarisi font body, jadi kita set manual */
+button, input, textarea {
+  font-family: inherit;
 }
