@@ -1,5 +1,8 @@
-from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi import APIRouter, Depends, Query, HTTPException, UploadFile, File
 from typing import List, Optional
+import os
+import shutil
+import uuid
 
 from app.dependencies import get_product_service, get_current_user
 from app.services.product_service import ProductService
@@ -7,6 +10,36 @@ from app.schemas.product import ProductResponse, ProductCreate, ProductUpdate, S
 from app.domain.user import UserDomain
 
 router = APIRouter()
+
+@router.post("/upload")
+async def upload_product_image(
+    file: UploadFile = File(...),
+    current_user: UserDomain = Depends(get_current_user),
+):
+    if current_user.user_type != "seller":
+        raise HTTPException(status_code=403, detail="Hanya penjual yang dapat mengunggah foto menu")
+    
+    if not file.content_type or not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="File harus berupa gambar")
+    
+    # Ensure upload directory exists
+    os.makedirs("static/uploads", exist_ok=True)
+    
+    # Generate unique filename
+    file_extension = os.path.splitext(file.filename)[1] if file.filename else ".png"
+    if not file_extension:
+        file_extension = ".png"
+    
+    unique_filename = f"{uuid.uuid4()}{file_extension}"
+    file_path = os.path.join("static/uploads", unique_filename)
+    
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal menyimpan file: {str(e)}")
+    
+    return {"url": f"/static/uploads/{unique_filename}"}
 
 @router.get("/", response_model=List[ProductResponse])
 async def read_products(

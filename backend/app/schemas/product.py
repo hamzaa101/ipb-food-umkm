@@ -9,7 +9,8 @@ class ProductBase(BaseModel):
     category: Optional[str] = None
     image_url: Optional[str] = None
     is_available: bool = True
-    seller_id: str
+    seller_id: Optional[str] = None
+    stock: int = 0
 
     model_config = ConfigDict(
         alias_generator=to_camel,

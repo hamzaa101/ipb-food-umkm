@@ -1,9 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+import os
 
 from app.routers import products, auth, users, promos, cart, notifications, locations, seller_applications, orders
 
+# Resolve path to backend/static directory
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+static_dir = os.path.join(base_dir, "static")
+os.makedirs(static_dir, exist_ok=True)
+
 app = FastAPI(title="IPB Food & UMKM Student Hub")
+
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 app.add_middleware(
     CORSMiddleware,
