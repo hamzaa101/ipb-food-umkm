@@ -1,0 +1,220 @@
+/* --- src/styles/AdminLog.css --- */
+
+.log-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%; /* Membatasi lebar agar timeline mudah dibaca */
+  width: 100%;
+  margin: 0 auto;
+}
+
+.log-card {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(36, 61, 103, 0.02);
+  overflow: hidden;
+}
+
+.log-header {
+  padding: var(--space-24);
+  border-bottom: 1px solid var(--divider-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.log-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.btn-text-export {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.btn-text-export:hover {
+  color: var(--primary-hover);
+}
+
+.log-body {
+  padding: var(--space-24);
+}
+
+/* =========================================
+   TIMELINE STYLES
+   ========================================= */
+.timeline-container {
+  position: relative;
+  margin-left: 16px;
+  padding-bottom: 16px;
+}
+
+.timeline-container {
+  position: relative;
+  padding-bottom: 16px;
+}
+
+.timeline-container::before {
+  content: "";
+  position: absolute;
+
+  left: 15px; /* tengah icon 32px */
+  top: 16px;
+  bottom: 16px;
+
+  width: 2px;
+  background-color: #E2E8F0;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 56px;
+  margin-bottom: 32px;
+}
+
+.timeline-item::after {
+  display: none !important;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-icon-wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9999px;
+  box-shadow: 0 0 0 6px var(--bg-surface);
+
+  z-index: 2;
+}
+
+/* Warna Kustom Ikon */
+.icon-success { background-color: #D1FAE5; color: var(--success); }
+.icon-info { background-color: #DBEAFE; color: #1D4ED8; }
+.icon-danger { background-color: #FEE2E2; color: var(--danger); }
+.icon-purple { background-color: #F3E8FF; color: #7E22CE; }
+.icon-warning { background-color: #FEF3C7; color: #B45309; }
+
+.timeline-content-box {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-btn);
+  width: 100%;
+  padding: 20px;
+}
+
+.timeline-content-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 640px) {
+  .timeline-content-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-name {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.user-role-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  background-color: #E2E8F0;
+  color: var(--text-secondary);
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.time-text {
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.action-text {
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  margin: 0 0 8px 0;
+}
+
+.target-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+/* =========================================
+   LOAD MORE SECTION
+   ========================================= */
+.load-more-container {
+  margin-top: var(--space-24);
+  padding-top: var(--space-24);
+  border-top: 1px solid var(--divider-color);
+  text-align: center;
+}
+
+.btn-load-more {
+  padding: 8px 16px;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-btn);
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-load-more:hover:not(:disabled) {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.btn-load-more:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

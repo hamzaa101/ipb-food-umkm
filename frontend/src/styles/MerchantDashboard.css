@@ -1,0 +1,518 @@
+/* --- ROLE SELECTION MODAL --- */
+.role-modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: #0F172A; display: flex; flex-direction: column; 
+  align-items: center; justify-content: center; z-index: 1000;
+}
+.role-modal-box {
+  width: 327px; height: 263px; border-radius: 32px; background: #FFF;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.role-modal-title {
+  color: #243D67; text-align: center; font-size: 32px; font-weight: 700; margin-bottom: 8px;
+}
+.role-btn {
+  width: 269px; height: 56px; border-radius: 16px; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  color: #FFF; font-size: 24px; font-weight: 600;
+}
+.buyer-btn { background: #243D67; }
+.seller-btn { background: #FF9746; }
+.role-modal-brand {
+  margin-top: 40px; color: #FFF; text-align: center; font-size: 24px; font-weight: 700;
+}
+
+/* --- SELLER DASHBOARD BASE --- */
+.seller-bg { background-color: #F8FAFC; }
+
+/* === STICKY TOP SECTION === */
+.seller-sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: #F8FAFC; 
+  padding-bottom: 12px; 
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+}
+
+.seller-header {
+  background-color: #3B4A6B; 
+  padding: 16px 16px 0 16px; 
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: space-between; 
+  align-items: center; 
+  color: white;
+}
+
+.seller-profile { 
+  order: 1; 
+  display: flex; align-items: center; gap: 12px; 
+}
+.seller-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid white; object-fit: cover;}
+.seller-info h2 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+.seller-info p { font-size: 12px; display: flex; align-items: center; gap: 4px; color: #D1D5DB; }
+
+.seller-notif { 
+  order: 2; 
+  cursor: pointer; 
+}
+
+/* MAIN TABS */
+.seller-main-tabs-wrapper {
+  order: 3; 
+  width: 100%;
+  padding: 12px 0; 
+}
+.seller-main-tabs {
+  position: relative; 
+  width: 100%; max-width: 480px; height: 56px; border-radius: 12px; background: #F8FAFC;
+  display: flex; align-items: center; padding: 2px; margin: 0 auto;
+  z-index: 1; 
+}
+
+.sm-slider {
+  position: absolute;
+  top: 2px; bottom: 2px; left: 2px;
+  width: calc(33.33% - 1.33px); 
+  background: #FF9746;
+  border-radius: 10px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1; 
+}
+.sm-tab {
+  flex: 1; height: 52px; border-radius: 10px; border: none; background: transparent !important;
+  color: #6B7280; font-size: 12px; font-weight: 500;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  cursor: pointer; transition: color 0.3s;
+}
+.sm-tab.active { color: #FFF; font-weight: 600; }
+
+/* KONTROL PESANAN (Sticky Area) */
+.order-sticky-controls {
+  padding: 8px 16px 0 16px; 
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* TOGGLE BUKA / TUTUP */
+.store-toggle-wrapper {
+  width: 100%; max-width: 480px; height: 48px; border-radius: 24px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 6px 0 16px; 
+  cursor: pointer; transition: 0.3s; background: #FFF;
+}
+.store-toggle-wrapper.is-open { border: 2px solid #22C55E; }
+.store-toggle-wrapper.is-closed { border: 2px solid #EF4444; }
+
+.toggle-label { font-size: 16px; font-weight: 600; }
+.is-open .toggle-label { color: #00AF40; }
+.is-closed .toggle-label { color: #EF4444; }
+
+.toggle-pill-track {
+  position: relative;
+  width: 108px; height: 36px; border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background-color 0.3s ease;
+  overflow: hidden;
+}
+.is-open .toggle-pill-track { background: #22C55E; }
+.is-closed .toggle-pill-track { background: #EF4444; }
+
+.pill-knob {
+  position: absolute;
+  top: 6px; left: 6px; right: 6px; bottom: 6px;
+  width: 24px; height: 24px; border-radius: 50%; background: #FFF;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+}
+.is-open .pill-knob { transform: translateX(72px); }
+.is-closed .pill-knob { transform: translateX(0px); }
+
+.pill-text-open, .pill-text-close {
+  position: absolute; font-size: 14px; font-weight: 600; color: #FFF; transition: opacity 0.3s ease;
+  top: 50%; transform: translateY(-50%); 
+}
+.pill-text-open { left: 28px; opacity: 0; }
+.pill-text-close { right: 24px; opacity: 0; }
+.is-open .pill-text-open { opacity: 1; }
+.is-closed .pill-text-close { opacity: 1; }
+
+/* STATUS PESANAN TABS & KELOLA MENU TABS */
+.order-status-tabs {
+  position: relative; 
+  width: 100%; max-width: 480px; height: 60px; border-radius: 12px; border: 1px solid #E6E8EC; background: #FFF;
+  display: flex; align-items: center; margin: 0 auto; padding: 4px;
+  z-index: 1; 
+}
+.os-slider {
+  position: absolute;
+  top: 4px; bottom: 4px; left: 4px;
+  width: calc(33.33% - 2.66px); 
+  border-radius: 8px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+  z-index: -1;
+}
+.os-tab {
+  flex: 1; height: 100%; border-radius: 6px; border: none; background: transparent !important;
+  cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s;
+}
+.os-tab strong { color: #6B7280; font-size: 18px; font-weight: 700; line-height: 1.2; transition: 0.3s;}
+.os-tab span { color: #6B7280; font-size: 11px; font-weight: 600; text-align: center; transition: 0.3s;}
+
+/* Color Mapping Pesanan */
+.os-tab.active-antrean strong, .os-tab.active-antrean span,
+.os-tab.active-proses strong, .os-tab.active-proses span,
+.os-tab.active-selesai strong, .os-tab.active-selesai span { color: #FFF; }
+
+/* Color Mapping Menu */
+.os-tab.active-semua strong, .os-tab.active-semua span,
+.os-tab.active-tersedia strong, .os-tab.active-tersedia span,
+.os-tab.active-habis strong, .os-tab.active-habis span { color: #FFF; }
+
+/* ADD MENU BUTTON */
+.add-menu-wrapper {
+  width: 100%; max-width: 480px; margin: 0 auto; display: flex; justify-content: flex-end; padding-top: 2px;
+}
+.add-menu-btn {
+  color: #FF9746; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 4px; cursor: pointer;
+}
+
+/* === SCROLLABLE LIST SECTION === */
+.seller-scrollable-content {
+  padding-top: 12px; 
+}
+
+.order-list-wrapper {
+  padding: 0 16px 24px 16px;
+}
+.order-list { display: flex; flex-direction: column; gap: 16px; max-width: 480px; margin: 0 auto; }
+
+/* KARTU PESANAN */
+.order-card {
+  width: 100%; border-radius: 12px; background: #FFF; 
+  box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.1); position: relative; overflow: hidden;
+  padding: 16px; padding-left: 32px;
+}
+.order-card::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 16px; height: 100%;
+}
+.card-orange::before { background: #FF9746; }
+.card-yellow::before { background: #FFB800; }
+.card-green::before { background: #22C55E; }
+
+.oc-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+.oc-id { color: #FF9746; font-size: 12px; font-weight: 600; }
+.card-yellow .oc-id { color: #FFB800; }
+.card-green .oc-id { color: #22C55E; }
+.oc-customer { color: #243D67; font-size: 16px; font-weight: 600; }
+
+.oc-time {
+  height: 24px; border-radius: 24px; display: flex; align-items: center; padding: 0 12px;
+  font-size: 12px; font-weight: 600;
+}
+.card-orange .oc-time { background: rgba(255, 151, 70, 0.30); color: #FF7F2A; }
+.card-yellow .oc-time { background: rgba(255, 184, 0, 0.20); color: #FFB800; }
+.card-green .oc-time { background: rgba(34, 197, 94, 0.30); color: #22C55E; }
+
+.oc-items { border-top: 1px dashed #E6E8EC; border-bottom: 1px dashed #E6E8EC; padding: 12px 0; display: flex; flex-direction: column; gap: 12px;}
+.oc-item { display: flex; align-items: center; gap: 12px; }
+.oc-item img { width: 72px; height: 72px; border-radius: 12px; object-fit: cover; }
+.oci-info { flex: 1; }
+.oci-info h4 { color: #243D67; font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.oci-info p { color: #6B7280; font-size: 14px; font-weight: 600; }
+.oci-price { color: #FF9746; font-size: 16px; font-weight: 600; }
+
+.oc-total { display: flex; justify-content: space-between; padding: 12px 0; color: #6B7280; font-size: 16px; font-weight: 600; }
+.total-amount { color: #FF9746; }
+.card-yellow .total-amount { color: #FFB800; }
+.card-green .total-amount { color: #22C55E; }
+
+.oc-actions { display: flex; justify-content: space-between; gap: 12px; }
+.btn-tolak { flex: 1; height: 40px; border-radius: 12px; border: 2px solid #FF9746; background: #FFF; color: #FF9746; font-weight: 600; cursor: pointer; }
+.btn-terima { flex: 1; height: 40px; border-radius: 12px; background: #FF9746; border: none; color: #FFF; font-weight: 600; cursor: pointer; }
+.btn-selesai-disiapkan { width: 100%; height: 40px; border-radius: 12px; background: #FFB800; border: none; color: #FFF; font-weight: 600; cursor: pointer; }
+.belum-dinilai { width: 100%; height: 44px; border-radius: 12px; border: 1px solid #E6E8EC; display: flex; align-items: center; justify-content: center; color: #9CA3AF; font-weight: 600;}
+.rating-display { width: 100%; height: 44px; border-radius: 12px; border: 1px solid #E6E8EC; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; color: #6B7280; font-weight: 600; }
+
+/* KARTU MENU BARU */
+.menu-card {
+  width: 100%; height: 96px; border-radius: 24px; background: #FFF; box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.15);
+  display: flex; align-items: center; padding: 8px; gap: 12px;
+}
+.menu-img { width: 80px; height: 80px; border-radius: 20px; object-fit: cover; flex-shrink: 0;}
+.menu-content { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-right: 8px; }
+.menu-title-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.menu-title { color: #243D67; font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+.menu-edit-icon { cursor: pointer; }
+.menu-price { color: #FF9746; font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.menu-footer-row { display: flex; justify-content: space-between; align-items: center; }
+.menu-sold { color: #6B7280; font-size: 12px; font-weight: 500; }
+
+.menu-toggle-status { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.status-tersedia { color: #FF9746; }
+.status-habis { color: #9CA3AF; }
+
+/* PROMO EMPTY STATE BARU */
+.promo-empty-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; text-align: center; gap: 16px; color: #6B7280; font-size: 16px; font-weight: 600; line-height: 1.4; }
+
+/* EMPTY STATE */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 0; gap: 16px; }
+.empty-state p { color: #9CA3AF; font-size: 20px; font-weight: 700; text-align: center; }
+
+.fab-top {
+  position: fixed; 
+  bottom: 24px; 
+  right: calc(50% - 240px + 24px); 
+  width: 48px;
+  height: 48px;
+  background-color: #FFFFFF;
+  border: 2px solid #9CA3AF;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 60; 
+}
+
+@media (max-width: 480px) {
+  .fab-top {
+    right: 24px; 
+  }
+}
+
+/* Trik menyembunyikan elemen */
+.desktop-only { display: none !important; }
+
+/* === MEDIA QUERY UNTUK DESKTOP / LAYAR LEBAR === */
+@media (min-width: 1000px) {
+  /* Tukar Visibilitas Toggle */
+  .desktop-only { display: flex !important; }
+  .mobile-only { display: none !important; }
+
+  .seller-header {
+    position: relative; /* Kunci penting untuk acuan tengah absolut */
+    padding: 16px 32px;
+    flex-wrap: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Biarkan elemen berbaris dari kiri */
+  }
+
+  .seller-profile {
+    order: 1;
+    margin: 0; /* Tetap di ujung kiri */
+  }
+
+  /* --- Trik Absolute Centering --- 
+     Tabs dilepas dari ikatan baris dan dipaku tepat di 50% layar.
+     Ini menjamin posisinya 100% sejajar dengan kartu pesanan di bawahnya! */
+  .seller-main-tabs-wrapper {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+    width: 100%;
+  }
+
+  /* --- Trik Margin Auto --- 
+     margin-left: auto akan memakan semua ruang kosong yang tersisa,
+     sehingga melempar Toggle dan Notif sejauh mungkin ke ujung kanan layar! */
+  .store-toggle-wrapper.desktop-only {
+    order: 3;
+    margin: 0 24px 0 auto; /* Dorong ke kanan, dan beri jarak 24px dengan Lonceng Notif */
+    width: auto; 
+    min-width: 290px; /* Sedikit dirampingkan agar seimbang secara visual */
+  }
+
+  .seller-notif { 
+    order: 4; 
+    margin: 0;
+  }
+}
+
+/* --- TOGGLE KECIL (STATUS MENU) --- */
+.menu-toggle-status { 
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+  font-size: 12px; 
+  font-weight: 600; 
+  cursor: pointer; 
+}
+.status-tersedia { color: #FF9746; }
+.status-habis { color: #9CA3AF; }
+
+.menu-toggle-track {
+  position: relative;
+  width: 40px; 
+  height: 20px; 
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.status-tersedia .menu-toggle-track {
+  background-color: #FF9746;
+  border: 2px solid #FF9746;
+}
+
+.status-habis .menu-toggle-track {
+  background-color: #FFFFFF;
+  border: 2px solid #9CA3AF;
+}
+
+.menu-toggle-knob {
+  position: absolute;
+  top: 2px; 
+  left: 2px;
+  width: 12px; 
+  height: 12px; 
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+}
+
+/* Knob saat tersedia (Geser ke kanan 20px) */
+.status-tersedia .menu-toggle-knob {
+  background-color: #FFFFFF;
+  transform: translateX(20px);
+}
+
+/* Knob saat habis (Kembali ke kiri) */
+.status-habis .menu-toggle-knob {
+  background-color: #9CA3AF;
+  transform: translateX(0px);
+}
+
+/* --- POPUP NOTIFIKASI --- */
+.notif-wrapper {
+  order: 2; /* Menyamai posisi .seller-notif sebelumnya */
+  cursor: pointer;
+  position: relative; /* Kunci agar popup melayang pas di bawah lonceng */
+}
+
+.notif-popup {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 320px;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 100;
+  color: #1F2937;
+  cursor: default;
+}
+
+.notif-header {
+  padding: 16px;
+  font-weight: 700;
+  font-size: 16px;
+  border-bottom: 1px solid #E5E7EB;
+  color: #243D67;
+}
+
+.notif-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.notif-item {
+  padding: 16px;
+  border-bottom: 1px solid #F3F4F6;
+  transition: background-color 0.2s;
+}
+
+.notif-item:hover {
+  background-color: #F9FAFB;
+}
+
+.notif-content-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.notif-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #EF4444; /* Titik merah untuk notif belum dibaca */
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.notif-text-wrapper {
+  flex: 1;
+}
+
+.notif-main-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.notif-time {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+/* Mengganti nama target di Media Query desktop dari .seller-notif menjadi .notif-wrapper */
+@media (min-width: 1000px) {
+  /* ...kode yang sudah ada... */
+  .notif-wrapper { 
+    order: 4; 
+    margin: 0;
+  }
+}
+
+/* --- POP UP MENU PROFIL --- */
+.profile-popup-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  width: 200px;
+  border-radius: 12px;
+  background: #FFF;
+  box-shadow: 0 0 16px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  z-index: 100;
+  
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  font-feature-settings: 'liga' off, 'clig' off;
+}
+
+.popup-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.popup-item:hover {
+  background-color: #F8F9FB;
+}
+
+.popup-divider {
+  height: 2px;
+  background-color: #9CA3AF;
+  margin: 4px 16px;
+}
+
+.popup-item.logout {
+  color: #EF4444;
+}

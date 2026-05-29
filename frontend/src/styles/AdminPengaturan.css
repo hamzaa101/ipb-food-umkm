@@ -1,0 +1,197 @@
+/* --- src/styles/AdminPengaturan.css --- */
+
+.pengaturan-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  max-width: 900px; /* Lebar maksimal agar form nyaman diisi */
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* =========================================
+   SETTINGS CARD
+   ========================================= */
+.settings-card {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(36, 61, 103, 0.02);
+  overflow: hidden;
+}
+
+.settings-header {
+  padding: var(--space-24);
+  border-bottom: 1px solid var(--divider-color);
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.settings-header-icon {
+  width: 44px;
+  height: 44px;
+  background-color: var(--bg-main);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary); /* Ikon warna Navy */
+  flex-shrink: 0;
+}
+
+.settings-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.settings-desc {
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.settings-body {
+  padding: var(--space-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+/* =========================================
+   AVATAR SECTION
+   ========================================= */
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+@media (min-width: 640px) {
+  .avatar-section {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-24);
+  }
+}
+
+.avatar-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 4px solid var(--bg-surface);
+  box-shadow: 0 4px 12px rgba(36, 61, 103, 0.1);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-change-photo {
+  padding: 8px 16px;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-btn);
+  font-size: var(--text-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  width: fit-content;
+}
+
+.btn-change-photo:hover {
+  background-color: var(--border-color);
+}
+
+.avatar-hint {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* =========================================
+   FORM INPUTS
+   ========================================= */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-24);
+}
+
+@media (min-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-btn);
+  font-size: var(--text-small);
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(255, 151, 70, 0.2);
+}
+
+/* =========================================
+   FOOTER ACTIONS
+   ========================================= */
+.settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--divider-color);
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-btn);
+  font-size: var(--text-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-light {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.btn-light:hover { background-color: var(--border-color); }
+
+.btn-dark {
+  background-color: var(--secondary); /* Navy */
+  color: var(--text-on-primary);
+}
+.btn-dark:hover { background-color: #1A2D4C; }

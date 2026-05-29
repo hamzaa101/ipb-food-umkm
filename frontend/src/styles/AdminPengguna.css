@@ -1,0 +1,484 @@
+/* --- src/styles/AdminPengguna.css --- */
+
+.user-management-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+/* =========================================
+   1. MODAL (POP-UP) PENGGUNA
+   ========================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16);
+  background-color: rgba(36, 61, 103, 0.6); 
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-card);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 28rem;
+  overflow: hidden;
+  animation: modalFadeIn 0.2s ease-out forwards;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-16) var(--space-24);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modal-close-btn {
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close-btn:hover { color: var(--danger); }
+
+.modal-body {
+  padding: var(--space-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-input, .form-select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-btn);
+  font-size: var(--text-small);
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(255, 151, 70, 0.2);
+}
+
+.form-help-text {
+  font-size: var(--text-caption);
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.user-info-card {
+  background-color: var(--bg-main);
+  padding: var(--space-16);
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--border-color);
+  margin-bottom: var(--space-16);
+}
+
+.user-info-label { font-size: var(--text-caption); color: var(--text-secondary); margin: 0 0 4px 0;}
+.user-info-value { font-size: var(--text-small); font-weight: 700; color: var(--text-primary); margin: 0 0 12px 0; }
+.user-info-value:last-child { margin-bottom: 0; }
+
+.modal-footer {
+  display: flex; justify-content: flex-end; gap: var(--space-12);
+  padding: var(--space-16) var(--space-24);
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-main);
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: var(--radius-btn);
+  font-size: var(--text-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: var(--space-8);
+}
+
+.btn-secondary {
+  background-color: var(--bg-surface); color: var(--text-secondary); border: 1px solid var(--border-color);
+}
+.btn-secondary:hover { background-color: var(--border-color); color: var(--text-primary);}
+
+.btn-primary {
+  background-color: var(--primary); color: var(--text-on-primary); border: 1px solid var(--primary);
+}
+.btn-primary:hover { background-color: var(--primary-hover); }
+
+.btn-dark {
+  background-color: var(--secondary); color: var(--text-on-primary); border: 1px solid var(--secondary);
+}
+.btn-dark:hover { background-color: #1A2D4C; }
+
+/* =========================================
+   2. CUSTOM DROPDOWN (KATEGORI / PERAN)
+   ========================================= */
+.mf-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative; /* Penting untuk popup dropdown */
+}
+
+.mf-category-select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-btn);
+  background-color: var(--bg-surface);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mf-category-select:hover {
+  border-color: var(--text-muted);
+}
+
+.mf-category-select.is-open {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(255, 151, 70, 0.2);
+}
+
+.mf-selected-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mf-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background-color: rgba(255, 151, 70, 0.1);
+  color: var(--primary);
+  border-radius: 6px;
+  font-size: var(--text-caption);
+  font-weight: 600;
+}
+
+.mf-badge svg {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.mf-badge svg:hover { opacity: 1; }
+
+.mf-chevron {
+  transition: transform 0.2s;
+  color: var(--text-muted);
+}
+.mf-category-select.is-open .mf-chevron {
+  transform: rotate(180deg);
+}
+
+.mf-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-card);
+  box-shadow: 0 4px 15px rgba(36, 61, 103, 0.05);
+  z-index: 60;
+  max-height: 200px;
+  overflow-y: auto;
+  animation: dropdownFade 0.2s ease-out;
+}
+
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mf-dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  font-size: var(--text-small);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid var(--divider-color);
+}
+.mf-dropdown-item:last-child { border-bottom: none; }
+.mf-dropdown-item:hover { background-color: var(--bg-main); }
+
+.mf-add-custom { color: var(--primary); font-weight: 600; }
+.mf-add-custom:hover { background-color: rgba(255, 151, 70, 0.05); }
+
+.mf-custom-input-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.mf-custom-input-box input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: var(--text-small);
+  outline: none;
+}
+.mf-custom-input-box input:focus { border-color: var(--primary); }
+.mf-custom-input-box svg { cursor: pointer; }
+
+/* =========================================
+   3. AREA TABEL & KONTROL BAWAH
+   ========================================= */
+.controls-container {
+  display: flex; flex-direction: column; gap: var(--space-16);
+  background-color: var(--bg-surface); padding: var(--space-24);
+  border-radius: var(--radius-card); border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(36, 61, 103, 0.02);
+}
+
+@media (min-width: 640px) {
+  .controls-container { flex-direction: row; justify-content: space-between; align-items: center; }
+}
+
+.tabs-list { display: flex; gap: var(--space-8); flex-wrap: wrap; }
+.tab-item {
+  padding: 8px 16px; font-size: var(--text-small); font-weight: 600;
+  border-radius: var(--radius-btn); border: none; cursor: pointer; transition: all 0.2s;
+}
+.tab-item.active { background-color: rgba(255, 151, 70, 0.15); color: var(--primary); }
+.tab-item:not(.active) { background-color: var(--bg-main); color: var(--text-secondary); }
+.tab-item:not(.active):hover { background-color: var(--border-color); color: var(--text-primary); }
+
+.actions-group { display: flex; align-items: center; gap: var(--space-12); width: 100%; }
+@media (min-width: 640px) { .actions-group { width: auto; } }
+
+.search-box { position: relative; flex: 1; }
+@media (min-width: 640px) { .search-box { flex: none; } }
+
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-muted); }
+.search-input {
+  width: 100%; padding: 10px 16px 10px 36px; border: 1px solid var(--border-color);
+  border-radius: var(--radius-btn); font-size: var(--text-small);
+  background-color: var(--bg-surface); color: var(--text-primary); outline: none; transition: all 0.2s;
+}
+@media (min-width: 640px) { .search-input { width: 16rem; } }
+.search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(255, 151, 70, 0.2); }
+
+.table-card {
+  background-color: var(--bg-surface); border-radius: var(--radius-card);
+  border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(36, 61, 103, 0.02); overflow: hidden;
+}
+
+.table-responsive { overflow-x: auto; }
+.data-table { width: 100%; text-align: left; border-collapse: collapse; }
+.data-table th {
+  padding: var(--space-16) var(--space-24); font-size: var(--text-caption); font-weight: 600;
+  color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;
+  background-color: var(--bg-main); border-bottom: 1px solid var(--border-color); white-space: nowrap;
+}
+.data-table td {
+  padding: var(--space-16) var(--space-24); border-bottom: 1px solid var(--divider-color);
+  vertical-align: middle; white-space: nowrap;
+}
+.data-table tr:hover { background-color: var(--bg-main); }
+
+.user-cell { display: flex; align-items: center; gap: var(--space-12); }
+.user-avatar {
+  width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: var(--text-small); flex-shrink: 0;
+}
+
+.user-name { font-size: var(--text-small); font-weight: 600; color: var(--text-primary); margin: 0; }
+.user-email { font-size: var(--text-caption); color: var(--text-secondary); margin: 2px 0 0 0; }
+
+.role-cell { display: flex; align-items: center; gap: 6px; }
+.role-text { font-size: var(--text-small); color: var(--text-secondary); }
+
+.status-badge {
+  display: inline-flex; align-items: center; padding: 4px 12px;
+  border-radius: 9999px; font-size: var(--text-caption); font-weight: 600;
+}
+.status-active { background-color: #ecfdf5; color: var(--success); }
+.status-suspend { background-color: #fef2f2; color: var(--danger); }
+.status-none { font-size: var(--text-small); color: var(--text-muted); }
+
+.actions-cell { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-8); }
+.action-icon-btn {
+  padding: 6px; color: var(--text-muted); background: none; border: none;
+  border-radius: 6px; cursor: pointer; transition: all 0.2s; display: flex;
+}
+.action-icon-btn:hover { background-color: var(--bg-main); color: var(--primary); }
+.action-icon-btn.danger:hover { color: var(--danger); background-color: #FEE2E2; }
+
+.empty-row td { padding: 48px 24px; text-align: center; color: var(--text-secondary); font-size: var(--text-small); }
+
+.table-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-16) var(--space-24); border-top: 1px solid var(--border-color); background-color: var(--bg-surface);
+}
+.footer-text { font-size: var(--text-small); color: var(--text-secondary); margin: 0;}
+.pagination-group { display: flex; gap: 4px; }
+.page-btn {
+  padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 6px;
+  font-size: var(--text-small); background-color: var(--bg-surface); color: var(--text-secondary);
+  cursor: pointer; transition: all 0.2s; font-weight: 500;
+}
+.page-btn:not(:disabled):hover { background-color: var(--bg-main); color: var(--text-primary); }
+.page-btn.active { background-color: var(--primary); color: var(--text-on-primary); border-color: var(--primary); }
+.page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Avatar Colors */
+.avatar-blue { background-color: #dbeafe; color: #1d4ed8; }
+.avatar-orange { background-color: #ffedd5; color: #c2410c; }
+.avatar-emerald { background-color: #d1fae5; color: #047857; }
+.avatar-purple { background-color: #f3e8ff; color: #7e22ce; }
+.avatar-rose { background-color: #ffe4e6; color: #be123c; }
+
+/* =========================================
+   7. CUSTOM DROPDOWN SELECT (MODERN CARD STYLE)
+   ========================================= */
+.custom-dropdown-container {
+  position: relative;
+  width: 100%;
+}
+
+.custom-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-surface); /* #FFFFFF */
+  border: 1px solid var(--border-color); /* #E6E8EC */
+  border-radius: 16px; /* Border radius besar sesuai target */
+  padding: 16px 24px; /* Padding luas */
+  min-height: 56px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-dropdown-header:hover {
+  background-color: var(--bg-main); /* Hover abu-abu sangat muda */
+}
+
+.custom-dropdown-header.is-open {
+  border-color: var(--primary); /* #FF9746 */
+  box-shadow: 0 0 0 3px rgba(255, 151, 70, 0.15);
+}
+
+.custom-dropdown-value {
+  font-family: var(--font-family);
+  font-size: 18px; /* Font size lega */
+  font-weight: 500;
+  color: var(--secondary); /* #243D67 */
+}
+
+.custom-dropdown-icon {
+  color: var(--text-muted); /* #9CA3AF */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-dropdown-icon.is-open {
+  transform: rotate(180deg);
+}
+
+.custom-dropdown-list {
+  width: 100%;
+  margin-top: 0;
+
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(36, 61, 103, 0.08);
+
+  overflow: hidden;
+
+  /* Animasi */
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-8px);
+
+  transition:
+    max-height 350ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 250ms ease,
+    transform 300ms ease,
+    margin-top 250ms ease;
+}
+
+.custom-dropdown-list.is-open {
+  max-height: 300px;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 8px;
+}
+
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.custom-dropdown-item {
+  padding: 16px 24px; /* Tinggi item 50-60px */
+  font-family: var(--font-family);
+  font-size: 18px;
+  color: var(--secondary);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.custom-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.custom-dropdown-item:hover {
+  background-color: var(--bg-main);
+}
+
+.custom-dropdown-item.is-selected {
+  background-color: rgba(255, 151, 70, 0.08);
+  color: var(--primary);
+  font-weight: 600;
+}

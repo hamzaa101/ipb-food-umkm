@@ -1,0 +1,262 @@
+/* --- src/styles/StoreStatistics.css --- */
+
+/* BACKGROUND UTAMA DENGAN ASSET */
+.ss-layout {
+  display: flex;
+  justify-content: center;
+  background-color: #0F172A;
+  min-height: 100vh;
+}
+
+.ss-mobile-wrapper {
+  width: 100%;
+  background-color: #334155;
+  background-image: 
+    linear-gradient(0deg, #334155 5%, rgba(51, 65, 85, 0.50) 45%, rgba(51, 65, 85, 0.85) 100%),
+    url('../assets/background.png');
+  background-position: 50% 0%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1000px) {
+  .ss-mobile-wrapper {
+    background-image: 
+      linear-gradient(0deg, #334155 5%, rgba(51, 65, 85, 0.50) 45%, rgba(51, 65, 85, 0.85) 100%),
+      url('../assets/background-food.png');
+  }
+}
+
+/* HEADER */
+.ss-header {
+  padding: 30px 16px 24px 16px;
+  text-align: center;
+}
+
+.ss-title {
+  color: #FFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* CONTENT CONTAINER */
+.ss-content {
+  padding: 0 24px 40px 24px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* CARDS BESAR (Grafik) */
+.ss-card {
+  width: 100%;
+  border-radius: 12px;
+  background: #FFF;
+  padding: 16px;
+  box-shadow: 0 6.77px 8.418px rgba(0, 0, 0, 0.03);
+}
+
+.ss-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ss-card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ss-icon-box {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #243D67;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ss-card-header h3 {
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.ss-dropdown-mini {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.ss-dropdown-mini span {
+  color: rgba(0, 0, 0, 0.44);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; /* Diperbesar sedikit dari desain agar bisa dibaca */
+  font-weight: 400;
+}
+
+.ss-chart-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* GRID KARTU KECIL */
+.ss-small-cards-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.ss-small-cards-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.ss-small-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px;
+  border-radius: 12px;
+  background: #FFF;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  gap: 4px;
+}
+
+.ss-sc-label {
+  color: #6B7280;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.ss-sc-value {
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.ss-sc-sub {
+  color: #FF9746;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+/* Khusus Menu Terlaris */
+.ss-sc-menu-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+.ss-sc-menu-group img {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.ss-sc-menu-text {
+  display: flex;
+  flex-direction: column;
+}
+.ss-sc-menu-title {
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* DOWNLOAD BUTTON */
+.ss-btn-download {
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  background: #FF9746;
+  border: none;
+  color: #FFF;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* --- TAMBAHAN UNTUK DROPDOWN MENU --- */
+.ss-dropdown-container {
+  position: relative;
+}
+
+.ss-dropdown-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.ss-dropdown-mini:hover {
+  background-color: #F3F4F6;
+}
+
+.ss-dropdown-mini span {
+  color: #243D67; /* Warna diubah jadi biru navy agar lebih kontras */
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.ss-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: #FFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  z-index: 50;
+  width: 140px;
+  overflow: hidden;
+}
+
+.ss-dropdown-item {
+  padding: 10px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: #4B5563;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.ss-dropdown-item:hover {
+  background-color: #F8FAFC;
+  color: #FF9746;
+}
+
+.ss-dropdown-item.active {
+  background-color: #FFF7ED; /* Latar orange super pudar */
+  color: #FF9746;
+  font-weight: 600;
+}

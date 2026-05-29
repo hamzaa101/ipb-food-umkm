@@ -1,0 +1,705 @@
+/* Container Utama Dashboard */
+.dashboard-layout {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-main, #FFFFFF);
+  display: flex;
+  justify-content: center;
+  overflow: hidden; /* Mencegah body bergeser */
+}
+
+/* Wrapper khusus mobile */
+.dashboard-mobile-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #FFFFFF;
+  overflow-y: auto; /* Area yang bisa di-scroll vertikal */
+  overflow-x: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* --- 1. HEADER (Sticky Top) --- */
+.dashboard-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: #FFFFFF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #E2E8F0;
+}
+
+.profile-info h3 {
+  font-size: 1rem;
+  color: var(--text-primary, #243D67);
+  margin-bottom: 2px;
+  font-weight: 700;
+}
+
+.profile-info p {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #6B7280);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-icons {
+  display: flex;
+  gap: 4px;
+}
+
+.header-icons svg {
+  cursor: pointer;
+}
+
+/* --- 2. BANNER CAROUSEL --- */
+.banner-section {
+  padding: 16px 0;
+}
+
+.banner-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding: 0 24px;
+  /* Sembunyikan scrollbar bawaan */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.banner-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.banner-card {
+  min-width: 100%;
+  scroll-snap-align: center;
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 0 auto; 
+}
+
+.banner-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.banner-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: #CBD5F5;
+  border-radius: 50%;
+}
+.dot.active {
+  background-color: var(--text-muted, #9CA3AF);
+  width: 16px;
+  border-radius: 4px;
+}
+
+/* --- TAMBAHAN KHUSUS DESKTOP --- */
+@media (min-width: 768px) {
+  .banner-scroll {
+    justify-content: left; 
+  }
+  
+  .banner-card {
+    min-width: 480px;
+    width: 100%;
+  }
+  
+}
+
+/* --- 3. SEARCH & KATEGORI (Sticky di bawah Header) --- */
+/* Tinggi header kira-kira 73px, kita set top-nya ke sana */
+.sticky-filters {
+  position: sticky;
+  top: 72px; 
+  z-index: 40;
+  background-color: #FFFFFF;
+  padding: 8px 24px 16px 24px;
+  border-bottom: 1px solid var(--border-color, #F1F2F6);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1.5px solid var(--border-color, #E6E8EC);
+  border-radius: 999px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  position: relative; 
+  z-index: 10; /* Pastikan dia berada di atas elemen lain yang mungkin membayangi */
+  cursor: text; /* Kursor otomatis berubah jadi kursor ketik */
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  flex: 1; /* KUNCI: Paksa input melar mengambil SELURUH sisa ruang di dalam kotak */
+  height: 100%; /* Area klik sepanjang tinggi kotak */
+  margin-left: 12px;
+  font-size: 0.95rem;
+  color: #243D67;
+  background-color: transparent; /* Pastikan transparan agar tidak menimpa background utama */
+}
+
+.search-bar input::placeholder {
+  color: #6B7280;
+}
+
+.category-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  /* Sembunyikan scrollbar */
+  scrollbar-width: none;
+}
+.category-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  white-space: nowrap;
+  padding: 8px 16px;
+  border: 1px solid var(--border-color, #E6E8EC);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--text-primary, #243D67); 
+  font-weight: 600;
+  background-color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  
+  /* KUNCI PERBAIKAN: Melar mengisi ruang kosong & teks di tengah */
+  flex: 1 0 auto; 
+  justify-content: center;
+}
+
+.chip.active {
+  background-color: var(--color-primary, #FF9746);
+  color: #FFFFFF;
+  border-color: var(--color-primary, #FF9746);
+  font-weight: 600;
+}
+
+/* Styling untuk ikon dropdown di dalam chip */
+.chip svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  transition: transform 0.2s ease;
+}
+
+/* Efek panah terbalik saat dropdown aktif */
+.chip.active svg {
+  transform: rotate(180deg);
+}
+
+/* --- INDIKATOR SCROLL KATEGORI --- */
+.category-scroll-indicator {
+  width: 48px;
+  height: 4px;
+  background-color: var(--divider-color, #F1F2F6);
+  border-radius: 4px;
+  margin: 12px auto 0 auto; /* Otomatis ke tengah */
+  position: relative;
+  overflow: hidden;
+}
+
+.indicator-thumb {
+  width: 24px;
+  height: 100%;
+  background-color: var(--text-muted, #9CA3AF);
+  border-radius: 4px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  /* Animasi mulus saat elemen ikut bergeser */
+  transition: transform 0.1s ease-out; 
+}
+
+/* --- 4. LIST RESTORAN --- */
+.restaurant-list {
+  padding: 16px 24px 80px 24px;
+  display: grid;
+  grid-template-columns: 1fr; /* Default 1 kolom untuk layar HP */
+  gap: 24px; 
+}
+
+.resto-card {
+  display: grid;
+  grid-template-columns: 80px 1fr; /* Kolom 1 untuk gambar, Kolom 2 untuk konten */
+  grid-template-rows: auto auto; /* Baris 1 untuk info, Baris 2 untuk tombol */
+  grid-template-areas: 
+    "img info"
+    "img btn"; 
+  gap: 0 16px; 
+  padding-bottom: 24px;
+  
+  /* Karena sekarang bisa jadi 2 kolom, border-bottom mungkin akan terlihat aneh di layar lebar. 
+     Alternatif: kamu bisa ganti border-bottom ini menjadi box-shadow jika ingin tampilan ala 'kartu' 
+     (seperti di store detail). Tapi jika ingin tetap garis bawah, biarkan saja baris ini: */
+  border-bottom: 2px solid var(--divider-color, #E6E8EC); 
+  
+  align-items: start;
+  box-sizing: border-box; /* WAJIB ADA agar padding tidak membuat kartu keluar dari kolom grid */
+}
+
+.resto-img {
+  grid-area: img;
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  object-fit: cover;
+  background-color: #E2E8F0;
+}
+
+.resto-info {
+  grid-area: info;
+  width: 100%; 
+  min-width: 0; /* WAJIB ADA: Agar elemen tahu batas maksimal lebarnya di dalam Grid */
+  overflow: hidden; /* WAJIB ADA: Mencegah konten mendesak keluar */
+  margin-bottom: 8px;
+}
+
+.resto-info h4 {
+  font-size: 1rem;
+  color: var(--text-primary, #243D67);
+  margin-bottom: 4px;
+  font-weight: 700;
+  
+  /* WAJIB ADA: 3 Serangkai pemotong teks panjang */
+  white-space: nowrap;      /* Larang teks turun ke baris 2 */
+  overflow: hidden;         /* Sembunyikan sisa teks */
+  text-overflow: ellipsis;  /* Munculkan titik-titik (...) */
+  
+  display: block;
+}
+
+.resto-stats {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.rating-star {
+  color: var(--color-accent, #FFB800);
+}
+
+.rating-score {
+  font-weight: 700;
+  color: #6B7280;
+}
+
+.rating-count {
+  color: #6B7280;
+}
+
+.resto-price {
+  font-size: 0.85rem;
+  color: #6B7280;
+}
+
+.btn-kunjungi {
+  border: 1px solid var(--color-primary, #FF9746);
+  color: var(--color-primary, #243D67);
+  background: transparent;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  justify-self: end; 
+  align-self: end;   
+  transition: all 0.2s;
+}
+
+.btn-kunjungi:active {
+  background-color: var(--color-primary, #FF9746);
+  color: #FFFFFF;
+}
+
+/* Floating Action Button (Scroll to top) */
+.fab-top {
+  position: fixed; /* KUNCI PERBAIKAN: Ubah dari absolute ke fixed */
+  bottom: 24px; /* Tetap sama, jarak dari bawah viewport */
+  right: calc(50% - 240px + 24px); /* Trik untuk posisi fixed di dalam container mobile yang di-center */
+  width: 48px;
+  height: 48px;
+  background-color: #FFFFFF;
+  border: 2px solid #9CA3AF;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 60; /* Jaga agar tetap di atas segalanya */
+}
+
+/* Tambahkan Media Query untuk layar lebih kecil dari container mobile kita (480px) */
+/* Agar tombol tidak terlalu ke kanan saat dibuka di HP yang layarnya sempit */
+@media (max-width: 480px) {
+  .fab-top {
+    right: 24px; /* Jarak tetap dari kanan viewport untuk layar HP */
+  }
+}
+
+/* --- POP UP MENU PROFIL --- */
+.profile-wrapper {
+  position: relative; /* Menjadi acuan koordinat pop-up */
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.profile-popup-menu {
+  position: absolute;
+  top: calc(100% + 16px); /* Jarak dari profil ke bawah */
+  left: 0;
+  width: 200px;
+  /* Kita tidak perlu fix height 146px karena konten akan otomatis menyesuaikan, 
+     namun kita pastikan properties lain persis desain */
+  border-radius: 12px;
+  background: #FFF;
+  box-shadow: 0 0 16px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  z-index: 100;
+  
+  /* Font Styling Spesifik dari Desain */
+  color: var(--text-primary, #243D67);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  font-feature-settings: 'liga' off, 'clig' off;
+}
+
+.popup-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.popup-item:hover {
+  background-color: var(--bg-200, #F8F9FB); /* Efek hover halus */
+}
+
+.popup-divider {
+  height: 2px;
+  background-color: var(--border-color, #9CA3AF);
+  margin: 4px 16px;
+}
+
+/* Tombol Logout Khusus */
+.popup-item.logout {
+  color: var(--color-danger, #EF4444);
+}
+
+/* --- NOTIFIKASI WRAPPER --- */
+.notif-wrapper {
+  position: relative;
+}
+
+.notif-popup {
+  position: absolute;
+  top: calc(100% + 16px);
+  right: 0; /* Menempel ke arah kanan agar tidak keluar layar mobile */
+  width: 300px;
+  height: 332px;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 0 16px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  z-index: 110;
+  overflow: hidden; /* Header tidak ikut ter-scroll */
+}
+
+.notif-header {
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary, #243D67);
+  border-bottom: 1.5px solid var(--border-color, #E6E8EC);
+}
+
+.notif-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px;
+  /* Aturan untuk Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-muted, #9CA3AF) var(--bg-200, #F8F9FB);
+}
+
+/* --- CUSTOM SCROLLBAR NOTIFIKASI (Chrome/Safari/Edge) --- */
+.notif-list::-webkit-scrollbar {
+  width: 6px; /* Ketebalan scrollbar */
+}
+
+.notif-list::-webkit-scrollbar-track {
+  background: transparent;
+  margin-block: 8px; /* Memberi jarak agar tidak mentok atas/bawah menu */
+}
+
+.notif-list::-webkit-scrollbar-thumb {
+  background-color: var(--text-muted, #9CA3AF); /* Warna abu-abu desain */
+  border-radius: 10px; /* Bentuk kapsul membulat */
+}
+
+.notif-list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary, #6B7280); /* Sedikit menggelap saat di-hover */
+}
+
+.notif-item {
+  padding: 16px 4px;
+  border-bottom: 1px solid var(--divider-color, #F1F2F6);
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-content-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.notif-dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-primary, #FF9746);
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.notif-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.notif-main-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #243D67);
+  margin: 0;
+}
+
+.notif-time {
+  font-size: 12px;
+  color: var(--text-muted, #9CA3AF);
+  margin: 0;
+}
+
+/* --- MODAL KONFIRMASI LOGOUT --- */
+.logout-modal-overlay {
+  position: fixed; /* Menutupi seluruh layar */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.50); /* Background gelap transparan */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999; /* Pastikan di atas segalanya */
+}
+
+.logout-modal-box {
+  width: 300px;
+  height: 200px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.logout-modal-box svg {
+  width: 32px; /* Tentukan lebar eksplisit */
+  height: 32px; /* Tentukan tinggi eksplisit */
+  margin-bottom: 12px;
+  flex-shrink: 0; /* Mencegah logo gepeng/mengecil di beberapa browser */
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  color: var(--text-primary, #243D67);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.modal-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6B7280);
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-cancel {
+  width: 126px;
+  height: 40px;
+  background-color: var(--border-color, #E6E8EC); /* Warna abu-abu tombol kembali */
+  color: var(--text-primary, #243D67);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-confirm {
+  width: 126px;
+  height: 40px;
+  background-color: var(--color-danger, #EF4444); /* Warna merah tombol keluar */
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-cancel:active, .btn-confirm:active {
+  opacity: 0.8;
+}
+
+/* --- POP UP DROPDOWN JENIS & AREA --- */
+.filter-dropdown {
+  position: absolute;
+  top: calc(100% - 4px); /* Muncul tepat di bawah header filters */
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 0 16px 4px rgba(0, 0, 0, 0.25);
+  height: 216px;
+  padding: 8px 4px 8px 8px; /* Sengaja padding kanan 4px untuk ruang scrollbar */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 100;
+  overflow-y: auto;
+  
+  /* Aturan tipografi khusus dropdown */
+  color: var(--text-primary, #243D67);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  font-feature-settings: 'liga' off, 'clig' off;
+}
+
+/* Ukuran dan posisi spesifik */
+.jenis-dropdown {
+  width: 160px;
+  right: 0; /* Menempel ke arah kanan chip jenis */
+}
+
+.area-dropdown {
+  width: 180px;
+  right: 0; /* Menempel ke arah kanan chip area */
+}
+
+@media (max-width: 1025px) {
+  .area-dropdown {
+    left: auto !important; /* Paksa abaikan perhitungan 'left' dari React */
+    right: 24px !important; /* Paksa nempel persis di garis batas padding kanan */
+  }
+}
+
+/* Item di dalam dropdown */
+.dropdown-item {
+  width: 100%;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  /* Mencegah teks terpotong */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-item:hover, .dropdown-item.active {
+  background-color: #E6E8EC;
+}
+
+/* --- CUSTOM SCROLLBAR UNTUK DROPDOWN (Sesuai SVG 4x168) --- */
+.filter-dropdown::-webkit-scrollbar {
+  width: 4px; /* Sesuai lebar rect SVG */
+}
+
+.filter-dropdown::-webkit-scrollbar-track {
+  background: #E6E8EC;
+  border-radius: 2px;
+  margin-block: 8px; /* Memberikan efek padding atas-bawah pada track */
+}
+
+.filter-dropdown::-webkit-scrollbar-thumb {
+  background-color: var(--text-muted, #9CA3AF);
+  border-radius: 2px;
+}
+
+/* TAMBAHKAN INI DI BARIS PALING BAWAH FILE */
+@media (min-width: 650px) {
+  .restaurant-list {
+    grid-template-columns: 1fr 1fr; /* Terkunci maksimal 2 kolom di layar lebar */
+  }
+}

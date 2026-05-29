@@ -1,0 +1,353 @@
+/* --- src/styles/Order.css --- */
+
+.order-page-container {
+  min-height: 100vh;
+  background-color: #F8F9FB;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.order-mobile-wrapper {
+  width: 100%;
+  background-color: #FAFAFA;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 100px;
+  box-shadow: 0 0 24px rgba(0,0,0,0.05);
+}
+
+/* HEADER GLOBAL */
+.order-header-bar {
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E6E8EC;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.order-header-bar h2 {
+  font-size: 18px;
+  color: #243D67;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* TABS */
+.order-tabs-container {
+  display: flex;
+  justify-content: center; /* Memastikan tab berada di tengah */
+  padding: 16px 24px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E6E8EC;
+}
+
+.order-tabs-bg {
+  display: flex;
+  width: 100%; /* Sesuai spesifikasi */
+  max-width: 480px; /* Biar gak meledak di layar besar */
+  height: 40px; /* Sesuai spesifikasi */
+  background: #E6E8EC;
+  border-radius: 12px;
+  padding: 4px;
+  box-sizing: border-box; /* Penting! */
+}
+
+.order-tab-btn {
+  flex: 1;
+  height: 100%; /* Memenuhi tinggi .order-tabs-bg */
+  border-radius: 12px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Warna penuh Oranye saat "Sedang berlangsung" aktif */
+.order-tab-btn.active-orange {
+  background: #FF9746;
+  color: #FFF;
+}
+
+/* Warna penuh Hijau saat "Selesai" aktif */
+.order-tab-btn.active-green {
+  background: #22C55E;
+  color: #FFF;
+}
+
+/* KONDISI KOSONG */
+.order-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 80px;
+  color: #9CA3AF;
+  text-align: center;
+}
+
+/* KARTU PESANAN */
+.order-list-content {
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-card {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: 12px;
+  background: #FFF;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box; /* Penting! */
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.order-store-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-store-name {
+  color: #243D67;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* STATUS BADGE */
+.status-badge {
+  height: 24px;
+  padding: 0 12px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: lowercase;
+}
+.status-diproses { background: rgba(255, 151, 70, 0.20); color: #FF9746; }
+.status-siap { background: rgba(34, 197, 94, 0.20); color: #22C55E; }
+.status-selesai { background: rgba(34, 197, 94, 0.20); color: #22C55E; }
+
+/* ISI PESANAN (CARD) */
+.order-card-body {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid #E6E8EC;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.order-item-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.order-item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-item-text {
+  color: #243D67;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.order-item-price { color: #6B7280; font-weight: 500; }
+
+.order-time {
+  color: #9CA3AF;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.order-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.order-total-label { color: #6B7280; font-size: 14px; font-weight: 600; }
+.order-total-value { color: #FF9746; font-size: 16px; font-weight: 700; }
+.order-total-value.green { color: #22C55E; }
+
+
+/* --- TOMBOL ACTIONS (Perbaikan Besar!) --- */
+.order-actions-row {
+  display: flex;
+  gap: 12px;
+  width: 100%; /* Pastikan baris tombol penuh */
+  box-sizing: border-box;
+}
+
+/* Kelas dasar untuk semua tombol di riwayat/detail */
+.btn-order-outline, .btn-order-fill {
+  flex: 1; /* Di riwayat, tombol akan membagi 2 secara adil */
+  height: 40px; /* Sesuai spesifikasi */
+  border-radius: 12px; /* Sesuai spesifikasi */
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none; /* Reset border */
+  box-sizing: border-box; /* Penting! */
+  padding: 0;
+}
+
+.btn-order-outline {
+  border: 1px solid #E6E8EC; 
+  background: #FFF;
+  color: #FF9746;
+}
+
+
+.btn-order-fill {
+  background: #FF9746; 
+  color: #FFF;
+}
+
+.btn-pesan {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #FF9746;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+/* --- TIMELINE (UNTUK DETAIL PESANAN) --- */
+.timeline-container {
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+}
+.timeline-item {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  padding-bottom: 24px;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+/* Garis vertikal penghubung */
+.timeline-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 11px; /* Posisi di tengah ikon (24px/2) */
+  top: 24px;
+  bottom: 0;
+  width: 2px;
+  background-color: #9CA3AF;
+}
+.timeline-item.active:not(:last-child)::after {
+  background-color: #FF9746; /* Garis oranye jika sudah dilewati */
+}
+
+.timeline-icon { z-index: 2; background: #FFF; }
+.timeline-text h4 { margin: 0; font-size: 14px; color: #243D67; font-weight: 600; }
+.timeline-text p { margin: 4px 0 0 0; font-size: 12px; color: #6B7280; }
+.timeline-item.active h4 { color: #FF9746; }
+.timeline-item.done h4 { color: #22C55E; }
+
+/* INFO SECTION (Detail Pesanan) */
+.detail-section {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  background: #FFF;
+  border: 1px solid #E6E8EC;
+  padding: 16px;
+  align-self: center;
+  box-sizing: border-box; /* Penting! */
+}
+.detail-id-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.detail-id-text { color: #243D67; font-weight: 700; font-size: 14px; }
+.btn-salin { background: #FFE4CC; color: #FF9746; padding: 4px 12px; border-radius: 16px; border: none; font-size: 12px; font-weight: 600; }
+
+
+/* --- STICKY BOTTOM BAR DETAIL (PERBAIKAN TOTAL UNTUK TOMBOL) --- */
+.detail-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  background: #FFF;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 100;
+  box-sizing: border-box; /* PENTING: Biar padding gak bikin meledak lebarnya */
+}
+
+/* Trik Jitu: Paksa tombol FILL yang berada langsung di dalam detail-bottom-bar untuk penuh! */
+.detail-bottom-bar > .btn-order-fill {
+  width: 100% !important; /* Paksa penuh ke samping! */
+  flex: none; /* Matikan flex: 1 bawaan agar tidak membagi ruang */
+}
+
+
+/* RATING PAGE */
+.rating-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 40px 0;
+}
+.rating-avatar {
+  width: 120px; height: 120px; border-radius: 50%; border: 2px solid #243D67; object-fit: cover;
+}
+.rating-stars { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; }
+.btn-kirim {
+  width: 100%; height: 44px; border-radius: 12px; background: #FFB800; color: #FFF; border: none; font-weight: 700; font-size: 16px; cursor: pointer;
+}

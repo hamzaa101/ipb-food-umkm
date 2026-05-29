@@ -1,0 +1,441 @@
+/* BACKGROUND UTAMA */
+.mf-layout {
+  display: flex;
+  justify-content: center;
+  background-color: #0F172A;
+  min-height: 100vh;
+}
+
+.mf-mobile-wrapper {
+  width: 100%;
+  background-color: #F8FAFC;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.mf-header {
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.mf-header h2 {
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* CONTENT CONTAINER */
+.mf-content {
+  padding: 0 24px 120px 24px; /* Padding bawah extra untuk bottom bar */
+  display: flex;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+/* IMAGE UPLOAD */
+.mf-image-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.mf-image-box {
+  width: 112px;
+  height: 112px;
+  border-radius: 12px;
+  border: 2px solid #9CA3AF;
+  background: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+
+.mf-image-box.readonly {
+  cursor: default;
+  opacity: 0.9;
+}
+
+.mf-uploaded-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mf-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.mf-upload-placeholder span {
+  color: #6B7280;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* INPUT FORMS */
+.mf-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.mf-form-group label {
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mf-input {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+  border: 2px solid #9CA3AF;
+  background: #FFF;
+  padding: 0 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: #243D67;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.mf-input:focus {
+  border-color: #243D67;
+}
+
+/* Input saat Read Only */
+.mf-input.readonly {
+  background-color: #F3F4F6;
+  border-color: #E5E7EB;
+  cursor: default;
+  color: #6B7280;
+}
+
+/* CUSTOM CATEGORY SELECT */
+.mf-category-select {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
+  border: 2px solid #9CA3AF;
+  background: #FFF;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.mf-category-select.readonly {
+  background-color: #F3F4F6;
+  border-color: #E5E7EB;
+  cursor: default;
+}
+
+.mf-category-select.is-open {
+  border-color: #243D67;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: 1px solid transparent;
+}
+
+.mf-chevron {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.mf-category-select.is-open .mf-chevron {
+  transform: rotate(180deg);
+}
+
+.mf-placeholder {
+  color: #9CA3AF;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.mf-selected-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+}
+
+.mf-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 8px;
+  border: 2px solid #243D67;
+  background: #FFF;
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+}
+.mf-badge svg {
+  cursor: pointer;
+}
+
+.mf-category-select.readonly .mf-badge {
+  border-color: #9CA3AF;
+  color: #6B7280;
+}
+
+/* CATEGORY DROPDOWN LIST */
+.mf-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 252px;
+  overflow-y: auto;
+  border-radius: 0 0 12px 12px;
+  border: 2px solid #9CA3AF;
+  border-top: none;
+  background: #FFF;
+  z-index: 10;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+}
+
+.mf-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #F3F4F6;
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.mf-dropdown-item:last-child {
+  border-bottom: none;
+}
+.mf-dropdown-item:hover {
+  background-color: #F8F9FB;
+}
+
+.mf-add-custom {
+  color: #6B7280;
+}
+
+.mf-custom-input-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.mf-custom-input-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #243D67;
+  font-weight: 500;
+}
+
+/* === BOTTOM FIXED BAR === */
+.mf-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #FFF;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  z-index: 20;
+}
+
+.mf-bottom-content {
+  display: flex;
+  justify-content: center;
+}
+
+.mf-btn-group {
+  display: flex;
+  width: 100%;
+  max-width: 440px;
+  gap: 16px;
+}
+
+/* Button Variants */
+.mf-btn-primary-large {
+  width: 100%;
+  max-width: 480px;
+  height: 48px;
+  border-radius: 12px;
+  background: #FF9746;
+  border: none;
+  color: #FFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mf-btn-danger {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  background: #EF4444;
+  border: none;
+  color: #FFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mf-btn-primary-outline {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  border: 2px solid #FF9746;
+  background: #FFF;
+  color: #FF9746;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Tambahkan kelas ini di area Button Variants */
+.mf-btn-cancel-outline {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  border: 2px solid #6B7280;
+  background: #FFF;
+  color: #6B7280;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mf-btn-primary-filled {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  background: #FF9746;
+  border: none;
+  color: #FFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* === OVERLAY MODAL === */
+.mf-modal-overlay {
+  position: fixed; /* Agar memenuhi seluruh layar (viewport) */
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(15, 23, 42, 0.50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.mf-modal-box {
+  width: 300px;
+  border-radius: 16px;
+  background: #FFF;
+  padding: 32px 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.mf-modal-box h3 {
+  color: #243D67;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 16px 0 8px 0;
+}
+
+.mf-modal-box p {
+  color: #6B7280;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+/* Modal Actions Buttons */
+.mf-modal-actions {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  justify-content: center;
+}
+
+.mf-btn-secondary-modal {
+  width: 126px; 
+  height: 40px; 
+  border-radius: 12px; 
+  background: #E6E8EC; 
+  color: #0F172A; 
+  border: none; 
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600; 
+  cursor: pointer;
+}
+
+.mf-btn-primary-modal {
+  width: 126px; 
+  height: 40px; 
+  border-radius: 12px; 
+  background: #FF9746; 
+  color: #FFF; 
+  border: none; 
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600; 
+  cursor: pointer;
+}
+
+.mf-btn-danger-modal {
+  width: 126px; 
+  height: 40px; 
+  border-radius: 12px; 
+  background: #EF4444; 
+  color: #FFF; 
+  border: none; 
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600; 
+  cursor: pointer;
+}

@@ -1,0 +1,378 @@
+/* --- src/styles/Admin.css --- */
+
+/* =========================================
+   1. DESIGN SYSTEM VARIABLES (ROOT)
+   ========================================= */
+:root {
+  /* Brand Foundation */
+  --primary: #FF9746;
+  --primary-hover: #FF7F2A;
+  --secondary: #243D67; /* Navy */
+  --accent: #FFB800;
+  --success: #22C55E;
+  --danger: #EF4444;
+
+  /* Light Mode Colors */
+  --bg-main: #F8F9FB; /* Neutral 200 untuk latar belakang utama agar card menonjol */
+  --bg-surface: #FFFFFF; /* White untuk Card dan Topbar */
+  --border-color: #E6E8EC;
+  --divider-color: #F1F2F6;
+
+  /* Text Colors */
+  --text-primary: #243D67; /* Menggunakan Navy sesuai pedoman */
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --text-on-primary: #FFFFFF;
+
+  /* Typography Scale */
+  --font-family: 'Inter', sans-serif;
+  --text-subheading: 32px;
+  --text-body: 16px;
+  --text-small: 14px;
+  --text-caption: 12px;
+
+  /* Spacing & Radius */
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  
+  --radius-btn: 12px;
+  --radius-card: 16px;
+}
+
+/* =========================================
+   2. LAYOUT UTAMA & SIDEBAR
+   ========================================= */
+.layout-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--bg-main);
+  font-family: var(--font-family);
+  overflow: hidden;
+  color: var(--text-primary);
+}
+
+.layout-sidebar {
+  display: none;
+  width: 260px;
+  background-color: #0F172A; /* Pakai Navy dari System Design */
+  color: var(--text-on-primary);
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+@media (min-width: 1024px) {
+  .layout-sidebar { display: flex; }
+}
+
+.sidebar-header {
+  height: 72px; /* Disesuaikan agar lega */
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-24);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.sidebar-title {
+  font-size: var(--text-body);
+  font-weight: 700;
+  color: var(--text-on-primary);
+  margin: 0;
+}
+.sidebar-nav {
+  padding: var(--space-24) var(--space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  overflow-y: auto;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-12) var(--space-16);
+  border-radius: var(--radius-btn);
+  transition: all 0.2s;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--text-small);
+}
+.nav-item.active {
+  background-color: rgba(255, 151, 70, 0.15);
+  color: var(--primary);
+  font-weight: 600;
+}
+.nav-item:not(.active):hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-on-primary);
+}
+.nav-icon { width: 20px; height: 20px; }
+
+.sidebar-footer { padding: var(--space-16); border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.logout-button {
+  display: flex; align-items: center; gap: var(--space-12);
+  padding: var(--space-12) var(--space-16); width: 100%;
+  border-radius: var(--radius-btn); background: none; border: none;
+  color: var(--danger); font-size: var(--text-small); font-weight: 600; cursor: pointer;
+  transition: 0.2s;
+}
+.logout-button:hover { background-color: rgba(239, 68, 68, 0.1); }
+
+/* =========================================
+   3. TOPBAR & KONTEN UTAMA
+   ========================================= */
+.layout-main {
+  flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden;
+}
+.main-header {
+  height: 72px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--space-24); flex-shrink: 0;
+}
+
+.header-left { display: flex; align-items: center; gap: var(--space-16); }
+.page-title { 
+  font-size: 20px; 
+  font-weight: 700; 
+  color: var(--text-primary); 
+  margin: 0; 
+}
+
+/* POP-UP MOBILE */
+.mobile-menu-container { position: relative; display: flex; align-items: center; }
+@media (min-width: 1024px) { .mobile-menu-container { display: none; } }
+.hamburger-trigger { background: none; border: none; padding: var(--space-8); cursor: pointer; color: var(--text-primary); }
+.overlay { position: fixed; inset: 0; z-index: 40; background: rgba(36, 61, 103, 0.5); }
+.popup-menu {
+  position: absolute; left: 0; top: 3.5rem; width: 240px;
+  background-color: var(--bg-surface); border-radius: var(--radius-card);
+  box-shadow: 0 10px 25px rgba(36, 61, 103, 0.1); z-index: 50;
+  padding: var(--space-8) 0; display: flex; flex-direction: column;
+}
+.popup-item {
+  display: flex; align-items: center; gap: var(--space-12);
+  padding: var(--space-12) var(--space-24); font-size: var(--text-small); font-weight: 500; text-decoration: none;
+}
+.popup-item.active { color: var(--primary); background-color: rgba(255, 151, 70, 0.1); }
+.popup-item:not(.active) { color: var(--text-primary); }
+.popup-divider { height: 1px; background-color: var(--divider-color); margin: var(--space-8) var(--space-16); }
+.popup-logout {
+  display: flex; align-items: center; gap: var(--space-12);
+  padding: var(--space-12) var(--space-24); font-size: var(--text-small); font-weight: 600;
+  color: var(--danger); background: none; border: none; cursor: pointer; width: 100%; text-align: left;
+}
+
+.page-content { flex: 1; overflow: auto; padding: 32px; }
+
+/* =========================================
+   4. KARTU STATISTIK (DASHBOARD)
+   ========================================= */
+.dashboard-container { display: flex; flex-direction: column; gap: var(--space-24); }
+.summary-cards { display: grid; grid-template-columns: 1fr; gap: var(--space-24); }
+@media (min-width: 768px) { .summary-cards { grid-template-columns: repeat(3, 1fr); } }
+
+.summary-card {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-card);
+  padding: var(--space-24);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(36, 61, 103, 0.02);
+  display: flex; flex-direction: column;
+}
+.summary-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-16); }
+.summary-card-title { font-size: var(--text-small); font-weight: 500; color: var(--text-secondary); margin: 0; }
+.summary-card-icon-wrapper {
+  width: 40px; height: 40px; border-radius: 50%;
+  background-color: rgba(255, 151, 70, 0.1); display: flex; align-items: center; justify-content: center;
+}
+.summary-card-icon { width: 20px; height: 20px; color: var(--primary); }
+.summary-card-content { margin-top: auto; }
+.summary-card-value { font-size: var(--text-subheading); font-weight: 700; color: var(--text-primary); margin: 0 0 var(--space-8) 0; }
+.summary-card-trend { font-size: var(--text-caption); font-weight: 500; margin: 0; }
+.trend-up { color: var(--success); }
+.trend-down { color: var(--danger); }
+
+/* =========================================
+   5. TABEL & LIST TOKO
+   ========================================= */
+.dashboard-data-section { display: grid; grid-template-columns: 1fr; gap: var(--space-24); }
+@media (min-width: 1024px) {
+  .dashboard-data-section { grid-template-columns: repeat(3, 1fr); }
+  .verification-table-card { grid-column: span 2; }
+}
+
+.verification-table-card, .top-shops-card {
+  background-color: var(--bg-surface); border-radius: var(--radius-card);
+  border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(36, 61, 103, 0.02);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.card-header { padding: var(--space-24); border-bottom: 1px solid var(--divider-color); }
+.card-title { font-size: var(--text-body); font-weight: 600; color: var(--text-primary); margin: 0; }
+
+.table-container { overflow-x: auto; }
+.verification-table { width: 100%; text-align: left; border-collapse: collapse; }
+.table-head-row { background-color: var(--bg-main); border-bottom: 1px solid var(--border-color); }
+.table-header-cell { padding: var(--space-16) var(--space-24); font-size: var(--text-caption); font-weight: 600; color: var(--text-secondary); text-transform: uppercase; }
+.text-right { text-align: right; }
+.table-row { border-bottom: 1px solid var(--divider-color); transition: 0.2s; }
+.table-row:hover { background-color: var(--bg-main); }
+.table-cell { padding: var(--space-16) var(--space-24); font-size: var(--text-small); }
+.cell-date { color: var(--text-secondary); }
+.cell-name { font-weight: 600; color: var(--text-primary); }
+.cell-owner { color: var(--text-secondary); }
+
+.review-btn {
+  padding: 8px 16px; font-size: var(--text-caption); font-weight: 600;
+  background-color: rgba(255, 151, 70, 0.1); color: var(--primary);
+  border-radius: var(--radius-btn); border: none; cursor: pointer; transition: 0.2s;
+}
+.review-btn:hover { background-color: var(--primary-hover); color: var(--text-on-primary); }
+
+.card-footer { padding: var(--space-16); border-top: 1px solid var(--divider-color); margin-top: auto; }
+.view-all-btn { font-size: var(--text-small); color: var(--primary); font-weight: 600; width: 100%; background: none; border: none; cursor: pointer; transition: 0.2s; }
+.view-all-btn:hover { color: var(--primary-hover); }
+
+/* Top Shops List */
+.top-shops-list { padding: var(--space-24); display: flex; flex-direction: column; gap: var(--space-24); }
+.top-shop-item { display: flex; align-items: center; gap: var(--space-16); }
+.top-shop-icon-wrapper { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.top-shop-icon { width: 20px; height: 20px; }
+.top-shop-info { flex: 1; min-width: 0; }
+.top-shop-name { font-size: var(--text-small); font-weight: 600; color: var(--text-primary); margin: 0 0 4px 0; }
+.top-shop-rank { font-size: var(--text-caption); color: var(--text-secondary); margin: 0; }
+.top-shop-sales { font-size: var(--text-small); font-weight: 700; color: var(--text-primary); margin: 0; }
+
+/* Hardcoded icon colors for Top Shops */
+.bg-orange-100 { background-color: #ffedd5; } .text-orange-600 { color: #ea580c; }
+.bg-red-100 { background-color: #fee2e2; } .text-red-600 { color: #dc2626; }
+.bg-amber-100 { background-color: #fef3c7; } .text-amber-600 { color: #d97706; }
+.bg-yellow-100 { background-color: #fef9c3; } .text-yellow-600 { color: #ca8a04; }
+.bg-stone-100 { background-color: #f5f5f4; } .text-stone-600 { color: #57534e; }
+
+/* =========================================
+   6. POP-UP NOTIFIKASI TERANG
+   ========================================= */
+.admin-notif-dot {
+  position: absolute; top: 2px; right: 2px; width: 10px; height: 10px;
+  background-color: var(--danger); border-radius: 50%; border: 2px solid var(--bg-surface);
+}
+.admin-notif-popup {
+  position: absolute; top: 50px; right: 0; width: 340px;
+  background-color: var(--bg-surface); border: 1px solid var(--border-color);
+  border-radius: var(--radius-card); box-shadow: 0 10px 30px rgba(36, 61, 103, 0.1);
+  z-index: 100; overflow: hidden; animation: fadeInDown 0.2s ease-out;
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.admin-notif-popup .notif-header {
+  padding: var(--space-16) var(--space-24); font-weight: 700; color: var(--text-primary);
+  border-bottom: 1px solid var(--divider-color); background-color: var(--bg-main); font-size: var(--text-body);
+}
+.admin-notif-popup .notif-list {
+  max-height: 350px; overflow-y: auto; display: flex; flex-direction: column;
+}
+.admin-notif-popup .notif-item {
+  padding: var(--space-16) var(--space-24); border-bottom: 1px solid var(--divider-color);
+  cursor: pointer; transition: 0.2s;
+}
+.admin-notif-popup .notif-item:hover { background-color: var(--bg-main); }
+.admin-notif-popup .notif-content-row { display: flex; align-items: flex-start; gap: var(--space-12); }
+.admin-notif-popup .notif-dot {
+  width: 8px; height: 8px; background-color: var(--primary); border-radius: 50%; margin-top: 6px; flex-shrink: 0;
+}
+.admin-notif-popup .notif-text-wrapper { flex: 1; }
+.admin-notif-popup .notif-main-text {
+  font-size: var(--text-small); font-weight: 500; color: var(--text-primary); margin: 0 0 4px 0; line-height: 1.4;
+}
+.admin-notif-popup .notif-time { font-size: var(--text-caption); color: var(--text-secondary); margin: 0; }
+
+/* --- MODAL KONFIRMASI LOGOUT --- */
+.logout-modal-overlay {
+  position: fixed; /* Menutupi seluruh layar */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.50); /* Background gelap transparan */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999; /* Pastikan di atas segalanya */
+}
+
+.logout-modal-box {
+  width: 300px;
+  height: 200px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.logout-modal-box svg {
+  width: 32px; /* Tentukan lebar eksplisit */
+  height: 32px; /* Tentukan tinggi eksplisit */
+  margin-bottom: 12px;
+  flex-shrink: 0; /* Mencegah logo gepeng/mengecil di beberapa browser */
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  color: var(--text-primary, #243D67);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.modal-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6B7280);
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-cancel {
+  width: 126px;
+  height: 40px;
+  background-color: var(--border-color, #E6E8EC); /* Warna abu-abu tombol kembali */
+  color: var(--text-primary, #243D67);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-confirm {
+  width: 126px;
+  height: 40px;
+  background-color: var(--color-danger, #EF4444); /* Warna merah tombol keluar */
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-cancel:active, .btn-confirm:active {
+  opacity: 0.8;
+}

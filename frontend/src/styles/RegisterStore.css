@@ -1,0 +1,215 @@
+/* --- src/styles/RegisterStore.css --- */
+
+.register-store-container {
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rs-mobile-wrapper {
+  width: 100%;
+  max-width: 480px; 
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px 120px 24px; /* Padding bawah ekstra agar konten tidak tertutup bar melayang */
+  position: relative;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.rs-header {
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.rs-header h2 {
+  font-size: 1.1rem;
+  color: #243D67;
+  font-weight: 700;
+}
+
+/* KOTAK UPLOAD FOTO BANNER */
+.rs-upload-box {
+  width: 100%;
+  height: 120px;
+  border: 1px solid #9CA3AF;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #6B7280;
+  margin-bottom: 24px;
+  background-color: #FFFFFF;
+}
+
+.rs-upload-box svg {
+  stroke: #6B7280;
+}
+
+.rs-upload-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* FORM STYLING */
+.rs-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rs-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.rs-input-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #243D67;
+}
+
+.rs-input {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid #9CA3AF;
+  background: #FFF;
+  padding: 0 16px;
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+}
+
+/* CUSTOM DROPDOWN LOKASI TOKO */
+.rs-select-btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid #9CA3AF;
+  background: #FFF;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #243D67;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.rs-select-btn.open {
+  border-radius: 12px 12px 0 0;
+  border-bottom-color: transparent; /* Menghilangkan border bawah saat terbuka */
+}
+
+.rs-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #FFF;
+  border: 1px solid #9CA3AF;
+  border-top: 1px solid #E6E8EC;
+  border-radius: 0 0 12px 12px;
+  z-index: 10;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.rs-dropdown-item {
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #243D67;
+  cursor: pointer;
+}
+
+.rs-dropdown-item:hover {
+  background-color: #F8F9FB;
+}
+
+/* STICKY BOTTOM BAR (Tombol Melayang) */
+.rs-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  background: #FFF;
+  box-shadow: 0 -4px 16px 2px rgba(0, 0, 0, 0.1); /* Bayangan sedikit diubah ke atas (-) */
+  padding: 16px 24px;
+  display: flex;
+  z-index: 100;
+}
+
+.btn-ajukan {
+  width: 100%;
+  height: 48px;
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: 12px;
+  background-color: #FF9746;
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* MODAL SUKSES */
+.success-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.success-modal-box {
+  width: 320px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.success-modal-box svg {
+  margin-bottom: 16px;
+}
+
+.success-title {
+  font-size: 1.1rem;
+  color: #243D67;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.success-subtitle {
+  font-size: 0.85rem;
+  color: #6B7280;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}

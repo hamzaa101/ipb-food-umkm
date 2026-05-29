@@ -1,0 +1,21 @@
+/* src/index.css */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* Ganti 'Inter' dengan nama font dari Figma kamu */
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-main, #0F172A);
+  color: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Jika kamu menggunakan tombol atau input, mereka kadang tidak mewarisi font body, jadi kita set manual */
+button, input, textarea {
+  font-family: inherit;
+}
