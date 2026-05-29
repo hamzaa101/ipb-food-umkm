@@ -33,6 +33,7 @@ class SellerDomain(UserDomain):
     verification_status: str = "pending"
     open_time: Optional[time] = None
     close_time: Optional[time] = None
+    is_accepting_orders: bool = True
     latitude: Optional[float] = None
     longitude: Optional[float] = None
 

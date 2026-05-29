@@ -1,4 +1,4 @@
-from sqlalchemy import String, Enum, Time, ForeignKey
+from sqlalchemy import String, Enum, Time, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 import uuid
 import enum
@@ -9,6 +9,7 @@ from app.models.base import Base, CoordinateMixin
 if TYPE_CHECKING:
     from .product import Product
     from .order import Order
+    from .cart import CartItem
 
 class SellerStatus(enum.Enum):
     PENDING = "pending"
@@ -24,6 +25,7 @@ class User(Base):
     user_type: Mapped[str] = mapped_column(String(50), nullable=False)
     profile_image_url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     orders: Mapped[List["Order"]] = relationship("Order", foreign_keys="Order.user_id", back_populates="user")
+    cart_items: Mapped[List["CartItem"]] = relationship("CartItem", back_populates="user", cascade="all, delete-orphan")
     __mapper_args__ = {"polymorphic_identity": "user", "polymorphic_on": "user_type"}
 
 class Buyer(User, CoordinateMixin):
@@ -41,5 +43,6 @@ class Seller(User, CoordinateMixin):
     verification_status: Mapped[SellerStatus] = mapped_column(Enum(SellerStatus), default=SellerStatus.PENDING)
     open_time: Mapped[Optional[time]] = mapped_column(Time, nullable=True)
     close_time: Mapped[Optional[time]] = mapped_column(Time, nullable=True)
+    is_accepting_orders: Mapped[bool] = mapped_column(Boolean, default=True)
     products: Mapped[List["Product"]] = relationship("Product", back_populates="seller")
     __mapper_args__ = {"polymorphic_identity": "seller"}

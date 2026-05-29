@@ -40,7 +40,7 @@ class OrderDomain(DomainModel):
         self.total_price = sum(item.subtotal for item in self.items)
         
     def update_status(self, new_status: str):
-        valid_statuses = ["Menunggu Konfirmasi", "Diproses", "Selesai", "Dibatalkan"]
+        valid_statuses = ["Menunggu Konfirmasi", "Diproses", "Siap Diambil", "Selesai", "Ditolak", "Dibatalkan"]
         if new_status not in valid_statuses:
             raise ValueError(f"Invalid status: {new_status}")
         self.status = new_status

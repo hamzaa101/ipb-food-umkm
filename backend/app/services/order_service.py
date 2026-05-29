@@ -37,6 +37,11 @@ class OrderService:
 
         created_orders = []
         for seller_id, items_data in orders_by_seller.items():
+            seller = await self.user_repo.get_seller_by_id(seller_id)
+            if not seller or not getattr(seller, "is_accepting_orders", True):
+                store_name = seller.store_name if seller else "Toko"
+                raise ValueError(f"Toko {store_name} sedang tutup dan tidak menerima pesanan saat ini.")
+                
             order = OrderDomain(
                 user_id=user_id,
                 seller_id=seller_id
@@ -60,6 +65,8 @@ class OrderService:
         for order, items_data in created_orders:
             seller = await self.user_repo.get_seller_by_id(order.seller_id)
             seller_name = seller.store_name if seller else None
+            buyer = await self.user_repo.get_by_id(order.user_id)
+            buyer_name = buyer.name if buyer else None
             
             items_response = []
             for i, item in enumerate(order.items):
@@ -83,6 +90,7 @@ class OrderService:
                 created_at=order.created_at,
                 updated_at=order.updated_at,
                 seller_name=seller_name,
+                buyer_name=buyer_name,
                 items=items_response
             ))
 
@@ -93,6 +101,8 @@ class OrderService:
         responses = []
         for order in orders:
             seller = await self.user_repo.get_seller_by_id(order.seller_id)
+            buyer = await self.user_repo.get_by_id(order.user_id)
+            buyer_name = buyer.name if buyer else None
             items_response = []
             for item in order.items:
                 product = await self.product_repo.get_product_by_id(item.product_id)
@@ -115,6 +125,7 @@ class OrderService:
                 created_at=order.created_at,
                 updated_at=order.updated_at,
                 seller_name=seller.store_name if seller else None,
+                buyer_name=buyer_name,
                 items=items_response
             ))
         return responses
@@ -123,10 +134,13 @@ class OrderService:
         order = await self.order_repo.get_by_id(order_id)
         if not order:
             raise ValueError("Pesanan tidak ditemukan")
-        if order.user_id != user_id:
+        if order.user_id != user_id and order.seller_id != user_id:
             raise ValueError("Tidak memiliki akses ke pesanan ini")
         
         seller = await self.user_repo.get_seller_by_id(order.seller_id)
+        buyer = await self.user_repo.get_by_id(order.user_id)
+        buyer_name = buyer.name if buyer else None
+        
         items_response = []
         for item in order.items:
             product = await self.product_repo.get_product_by_id(item.product_id)
@@ -149,6 +163,7 @@ class OrderService:
             created_at=order.created_at,
             updated_at=order.updated_at,
             seller_name=seller.store_name if seller else None,
+            buyer_name=buyer_name,
             items=items_response
         )
 
@@ -163,3 +178,96 @@ class OrderService:
         await self.order_repo.update(order)
         
         return await self.get_order_details(user_id, order_id)
+
+    async def get_seller_orders(self, seller_id: str, tab: str) -> List[OrderResponse]:
+        orders = await self.order_repo.get_seller_orders(seller_id, tab)
+        responses = []
+        for order in orders:
+            buyer = await self.user_repo.get_by_id(order.user_id)
+            buyer_name = buyer.name if buyer else None
+            
+            items_response = []
+            for item in order.items:
+                product = await self.product_repo.get_product_by_id(item.product_id)
+                items_response.append(OrderItemResponse(
+                    id=item.id,
+                    order_id=item.order_id,
+                    product_id=item.product_id,
+                    quantity=item.quantity,
+                    price=item.price,
+                    product_name=product.name if product else None,
+                    product_image_url=product.image_url if product else None
+                ))
+            
+            seller = await self.user_repo.get_seller_by_id(order.seller_id)
+            seller_name = seller.store_name if seller else None
+            
+            responses.append(OrderResponse(
+                id=order.id,
+                user_id=order.user_id,
+                seller_id=order.seller_id,
+                status=order.status,
+                total_price=order.total_price,
+                rating=order.rating,
+                created_at=order.created_at,
+                updated_at=order.updated_at,
+                seller_name=seller_name,
+                buyer_name=buyer_name,
+                items=items_response
+            ))
+        return responses
+
+    async def get_seller_order_counts(self, seller_id: str) -> dict:
+        return await self.order_repo.get_seller_order_counts(seller_id)
+
+    async def accept_order(self, seller_id: str, order_id: str) -> OrderResponse:
+        order = await self.order_repo.get_by_id(order_id)
+        if not order:
+            raise ValueError("Pesanan tidak ditemukan")
+        if order.seller_id != seller_id:
+            raise ValueError("Tidak memiliki akses ke pesanan ini")
+        if order.status != "Menunggu Konfirmasi":
+            raise ValueError("Hanya pesanan baru yang dapat diterima")
+            
+        order.update_status("Diproses")
+        await self.order_repo.update(order)
+        return await self.get_order_details(seller_id, order_id)
+
+    async def reject_order(self, seller_id: str, order_id: str) -> OrderResponse:
+        order = await self.order_repo.get_by_id(order_id)
+        if not order:
+            raise ValueError("Pesanan tidak ditemukan")
+        if order.seller_id != seller_id:
+            raise ValueError("Tidak memiliki akses ke pesanan ini")
+        if order.status != "Menunggu Konfirmasi":
+            raise ValueError("Hanya pesanan baru yang dapat ditolak")
+            
+        order.update_status("Ditolak")
+        await self.order_repo.update(order)
+        return await self.get_order_details(seller_id, order_id)
+
+    async def complete_preparation(self, seller_id: str, order_id: str) -> OrderResponse:
+        order = await self.order_repo.get_by_id(order_id)
+        if not order:
+            raise ValueError("Pesanan tidak ditemukan")
+        if order.seller_id != seller_id:
+            raise ValueError("Tidak memiliki akses ke pesanan ini")
+        if order.status != "Diproses":
+            raise ValueError("Hanya pesanan yang sedang diproses yang dapat diselesaikan persiapannya")
+            
+        order.update_status("Siap Diambil")
+        await self.order_repo.update(order)
+        return await self.get_order_details(seller_id, order_id)
+
+    async def complete_order(self, buyer_id: str, order_id: str) -> OrderResponse:
+        order = await self.order_repo.get_by_id(order_id)
+        if not order:
+            raise ValueError("Pesanan tidak ditemukan")
+        if order.user_id != buyer_id:
+            raise ValueError("Tidak memiliki akses ke pesanan ini")
+        if order.status != "Siap Diambil":
+            raise ValueError("Hanya pesanan yang siap diambil yang dapat diselesaikan")
+            
+        order.update_status("Selesai")
+        await self.order_repo.update(order)
+        return await self.get_order_details(buyer_id, order_id)

@@ -23,6 +23,7 @@ class UserUpdate(BaseModel):
     name: Optional[str] = None
     address: Optional[str] = None
     profile_image_url: Optional[str] = None
+    is_accepting_orders: Optional[bool] = None
 
     model_config = ConfigDict(
         alias_generator=to_camel,
@@ -50,6 +51,7 @@ class SellerResponse(UserResponse):
     close_time: Optional[time] = None
     address: Optional[str] = None
     verification_status: str
+    is_accepting_orders: bool
 
 class UserLogin(BaseModel):
     phone_number: str

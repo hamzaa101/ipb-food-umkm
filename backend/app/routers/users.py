@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
+from typing import Union
 
 from app.dependencies import get_current_user, get_user_service
-from app.schemas.user import UserResponse, UserUpdate, PasswordChangeRequest, DeleteAccountRequest
+from app.schemas.user import UserResponse, SellerResponse, BuyerResponse, UserUpdate, PasswordChangeRequest, DeleteAccountRequest
 from app.services.user_service import UserService
 from app.domain.user import UserDomain
 
@@ -11,14 +12,15 @@ class UserController:
     def __init__(self, user_service: UserService):
         self.user_service = user_service
 
-    async def read_current_user(self, current_user: UserDomain) -> UserResponse:
-        return current_user # Pydantic will map Domain -> Schema if they match
+    async def read_current_user(self, current_user: UserDomain) -> Union[SellerResponse, BuyerResponse, UserResponse]:
+        return current_user
 
-    async def update_current_user(self, updates: UserUpdate, current_user: UserDomain) -> UserResponse:
-        if not updates.name and updates.address is None:
+    async def update_current_user(self, updates: UserUpdate, current_user: UserDomain) -> Union[SellerResponse, BuyerResponse, UserResponse]:
+        updates_dict = updates.model_dump(exclude_none=True)
+        if not updates_dict:
             raise HTTPException(status_code=400, detail="No update data provided")
         return await self.user_service.update_user(
-            current_user, updates.dict(exclude_none=True)
+            current_user, updates_dict
         )
 
     async def change_password(self, current_user: UserDomain, pw_request: PasswordChangeRequest):
@@ -33,6 +35,14 @@ class UserController:
             raise HTTPException(status_code=400, detail="Password incorrect or deletion failed")
         return {"detail": "Account deleted"}
 
+    async def toggle_accept_orders(self, current_user: UserDomain) -> Union[SellerResponse, BuyerResponse, UserResponse]:
+        if current_user.user_type != "seller":
+            raise HTTPException(status_code=400, detail="Only sellers can toggle order status")
+        
+        is_open = getattr(current_user, "is_accepting_orders", True)
+        updates = {"is_accepting_orders": not is_open}
+        return await self.user_service.update_user(current_user, updates)
+
 
 def get_user_controller(
     user_service: UserService = Depends(get_user_service),
@@ -40,7 +50,7 @@ def get_user_controller(
     return UserController(user_service)
 
 
-@router.get("/me", response_model=UserResponse)
+@router.get("/me", response_model=Union[SellerResponse, BuyerResponse, UserResponse])
 async def read_current_user(
     current_user: UserDomain = Depends(get_current_user),
     controller: UserController = Depends(get_user_controller),
@@ -48,13 +58,21 @@ async def read_current_user(
     return await controller.read_current_user(current_user)
 
 
-@router.put("/me", response_model=UserResponse)
+@router.put("/me", response_model=Union[SellerResponse, BuyerResponse, UserResponse])
 async def update_current_user(
     updates: UserUpdate,
     current_user: UserDomain = Depends(get_current_user),
     controller: UserController = Depends(get_user_controller),
 ):
     return await controller.update_current_user(updates, current_user)
+
+
+@router.patch("/me/seller/toggle-orders", response_model=Union[SellerResponse, BuyerResponse, UserResponse])
+async def toggle_accept_orders(
+    current_user: UserDomain = Depends(get_current_user),
+    controller: UserController = Depends(get_user_controller),
+):
+    return await controller.toggle_accept_orders(current_user)
 
 
 @router.post("/me/change-password")

@@ -23,6 +23,7 @@ class OrderResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     seller_name: Optional[str] = None
+    buyer_name: Optional[str] = None
     items: List[OrderItemResponse] = []
 
     model_config = ConfigDict(from_attributes=True)

@@ -12,6 +12,15 @@ class UserRepository(BaseRepository[UserDomain, UserModel]):
     def __init__(self, db: AsyncSession):
         super().__init__(UserDomain, UserModel, db)
 
+    async def get_by_id(self, id: str) -> Optional[UserDomain]:
+        result = await self.db.execute(select(UserModel).filter(UserModel.id == id))
+        user = result.scalars().first()
+        if not user:
+            return None
+        if user.user_type == "seller":
+            return Mapper.to_domain(user, SellerDomain)
+        return Mapper.to_domain(user, BuyerDomain)
+
     async def get_sellers_by_status(self, status: SellerStatus) -> List[SellerDomain]:
         result = await self.db.execute(
             select(SellerModel).where(SellerModel.verification_status == status)

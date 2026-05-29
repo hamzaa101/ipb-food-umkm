@@ -55,3 +55,50 @@ class OrderRepository(BaseRepository[OrderDomain, OrderModel]):
             domain_order.items = [Mapper.to_domain(item, OrderItemDomain) for item in orm_order.items]
             orders.append(domain_order)
         return orders
+
+    async def get_seller_orders(self, seller_id: str, tab: str) -> List[OrderDomain]:
+        query = select(OrderModel).options(selectinload(OrderModel.items)).filter(OrderModel.seller_id == seller_id)
+        
+        if tab == 'queue':
+            query = query.filter(OrderModel.status == 'Menunggu Konfirmasi')
+        elif tab == 'processing':
+            query = query.filter(OrderModel.status.in_(['Diproses', 'Siap Diambil']))
+        elif tab == 'completed':
+            query = query.filter(OrderModel.status.in_(['Selesai', 'Ditolak', 'Dibatalkan']))
+            
+        query = query.order_by(OrderModel.created_at.desc())
+        result = await self.db.execute(query)
+        
+        orders = []
+        for orm_order in result.scalars().all():
+            domain_order = Mapper.to_domain(orm_order, OrderDomain)
+            domain_order.items = [Mapper.to_domain(item, OrderItemDomain) for item in orm_order.items]
+            orders.append(domain_order)
+        return orders
+
+    async def get_seller_order_counts(self, seller_id: str) -> dict:
+        from sqlalchemy import func
+        
+        queue_query = select(func.count(OrderModel.id)).filter(
+            OrderModel.seller_id == seller_id,
+            OrderModel.status == 'Menunggu Konfirmasi'
+        )
+        processing_query = select(func.count(OrderModel.id)).filter(
+            OrderModel.seller_id == seller_id,
+            OrderModel.status.in_(['Diproses', 'Siap Diambil'])
+        )
+        completed_query = select(func.count(OrderModel.id)).filter(
+            OrderModel.seller_id == seller_id,
+            OrderModel.status.in_(['Selesai', 'Ditolak', 'Dibatalkan'])
+        )
+        
+        queue_count = await self.db.scalar(queue_query) or 0
+        processing_count = await self.db.scalar(processing_query) or 0
+        completed_count = await self.db.scalar(completed_query) or 0
+        
+        return {
+            "queue": queue_count,
+            "processing": processing_count,
+            "completed": completed_count
+        }
+

@@ -10,8 +10,11 @@ class Mapper:
     def to_domain(orm_obj: O, domain_class: Type[D]) -> D:
         if not orm_obj:
             return None
-        # Convert ORM object to dict, ignoring SQLAlchemy internal state
-        data = {c.name: getattr(orm_obj, c.name) for c in orm_obj.__table__.columns}
+        # Convert ORM object to dict by checking the fields defined in the Pydantic domain model
+        data = {}
+        for field_name in domain_class.model_fields.keys():
+            if hasattr(orm_obj, field_name):
+                data[field_name] = getattr(orm_obj, field_name)
         return domain_class(**data)
 
     @staticmethod
