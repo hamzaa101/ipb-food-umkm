@@ -21,4 +21,12 @@ class Mapper:
     def to_orm(domain_obj: D, orm_class: Type[O]) -> O:
         if not domain_obj:
             return None
-        return orm_class(**domain_obj.model_dump(exclude_unset=True))
+        from sqlalchemy.orm import class_mapper
+        try:
+            mapper = class_mapper(orm_class)
+            valid_fields = set(mapper.columns.keys()) | set(mapper.relationships.keys())
+            data = domain_obj.model_dump(exclude_unset=True)
+            filtered_data = {k: v for k, v in data.items() if k in valid_fields}
+            return orm_class(**filtered_data)
+        except Exception:
+            return orm_class(**domain_obj.model_dump(exclude_unset=True))

@@ -12,6 +12,9 @@ class ProductDomain(DomainModel):
     stock: int = 0
     image_url: Optional[str] = None
     category: str
+    is_available: bool = True
+    sold_count: int = 0
+    average_rating: float = 0.0
     
     def decrease_stock(self, quantity: int):
         if self.stock < quantity:

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel
-from typing import Optional
+from typing import Optional, List
 
 class ProductBase(BaseModel):
     name: str
@@ -51,7 +51,26 @@ class ProductResponse(ProductBase):
     
     @classmethod
     def from_orm(cls, obj):
-        # manually map seller_id to store_id for Pydantic V2 from_attributes
-        setattr(obj, 'store_id', obj.seller_id)
+        from pydantic import BaseModel
+        # Safely handle both ORM objects and Pydantic domain models
+        if isinstance(obj, BaseModel):
+            # If it's a domain model, we can return model_validate directly
+            return super().model_validate(obj)
+        # For SQLAlchemy ORM
+        try:
+            setattr(obj, 'store_id', obj.seller_id)
+        except Exception:
+            pass
         return super().model_validate(obj)
+
+
+class SellerProductsResponse(BaseModel):
+    products: List[ProductResponse]
+    counts: dict
+
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
 

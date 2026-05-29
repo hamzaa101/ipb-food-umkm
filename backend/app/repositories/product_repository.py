@@ -14,17 +14,58 @@ class ProductRepository(BaseRepository[ProductDomain, ProductModel]):
         super().__init__(ProductDomain, ProductModel, db)
 
     async def get_products(self, seller_id: Optional[str] = None) -> List[ProductDomain]:
-        query = select(ProductModel).options(selectinload(ProductModel.seller))
+        from app.models.order import Order as OrderModel, OrderItem as OrderItemModel
+        
+        stmt = (
+            select(
+                ProductModel,
+                func.coalesce(func.sum(OrderItemModel.quantity), 0).label("sold_count"),
+                func.coalesce(func.avg(OrderModel.rating), 0.0).label("average_rating")
+            )
+            .outerjoin(OrderItemModel, ProductModel.id == OrderItemModel.product_id)
+            .outerjoin(OrderModel, OrderItemModel.order_id == OrderModel.id)
+            .options(selectinload(ProductModel.seller))
+        )
+        
         if seller_id:
-            query = query.where(ProductModel.seller_id == seller_id)
-        result = await self.db.execute(query)
-        return [Mapper.to_domain(p, ProductDomain) for p in result.scalars().all()]
+            stmt = stmt.where(ProductModel.seller_id == seller_id)
+            
+        stmt = stmt.group_by(ProductModel.id)
+        
+        result = await self.db.execute(stmt)
+        products = []
+        for row in result.all():
+            p_orm = row[0]
+            p_orm.sold_count = int(row[1])
+            p_orm.average_rating = float(row[2])
+            products.append(Mapper.to_domain(p_orm, ProductDomain))
+        return products
 
     async def get_product_by_id(self, product_id: str) -> Optional[ProductDomain]:
-        query = select(ProductModel).options(selectinload(ProductModel.seller)).filter(ProductModel.id == product_id)
-        result = await self.db.execute(query)
-        product = result.scalars().first()
-        return Mapper.to_domain(product, ProductDomain) if product else None
+        from app.models.order import Order as OrderModel, OrderItem as OrderItemModel
+        
+        stmt = (
+            select(
+                ProductModel,
+                func.coalesce(func.sum(OrderItemModel.quantity), 0).label("sold_count"),
+                func.coalesce(func.avg(OrderModel.rating), 0.0).label("average_rating")
+            )
+            .outerjoin(OrderItemModel, ProductModel.id == OrderItemModel.product_id)
+            .outerjoin(OrderModel, OrderItemModel.order_id == OrderModel.id)
+            .where(ProductModel.id == product_id)
+            .options(selectinload(ProductModel.seller))
+            .group_by(ProductModel.id)
+        )
+        
+        result = await self.db.execute(stmt)
+        row = result.first()
+        if not row:
+            return None
+            
+        p_orm = row[0]
+        p_orm.sold_count = int(row[1])
+        p_orm.average_rating = float(row[2])
+        return Mapper.to_domain(p_orm, ProductDomain)
 
     async def search_products(
         self,
@@ -35,7 +76,19 @@ class ProductRepository(BaseRepository[ProductDomain, ProductModel]):
         limit: int = 20,
         offset: int = 0,
     ) -> List[ProductDomain]:
-        stmt = select(ProductModel).join(ProductModel.seller).options(selectinload(ProductModel.seller))
+        from app.models.order import Order as OrderModel, OrderItem as OrderItemModel
+        
+        stmt = (
+            select(
+                ProductModel,
+                func.coalesce(func.sum(OrderItemModel.quantity), 0).label("sold_count"),
+                func.coalesce(func.avg(OrderModel.rating), 0.0).label("average_rating")
+            )
+            .join(ProductModel.seller)
+            .outerjoin(OrderItemModel, ProductModel.id == OrderItemModel.product_id)
+            .outerjoin(OrderModel, OrderItemModel.order_id == OrderModel.id)
+            .options(selectinload(ProductModel.seller))
+        )
 
         if query:
             stmt = stmt.where(
@@ -51,6 +104,13 @@ class ProductRepository(BaseRepository[ProductDomain, ProductModel]):
         if seller_address:
             stmt = stmt.where(SellerModel.address.ilike(f"%{seller_address}%"))
 
-        stmt = stmt.limit(limit).offset(offset)
+        stmt = stmt.group_by(ProductModel.id, SellerModel.id).limit(limit).offset(offset)
         result = await self.db.execute(stmt)
-        return [Mapper.to_domain(p, ProductDomain) for p in result.scalars().all()]
+        
+        products = []
+        for row in result.all():
+            p_orm = row[0]
+            p_orm.sold_count = int(row[1])
+            p_orm.average_rating = float(row[2])
+            products.append(Mapper.to_domain(p_orm, ProductDomain))
+        return products

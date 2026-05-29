@@ -40,7 +40,10 @@ class Seller(User, CoordinateMixin):
     store_name: Mapped[str] = mapped_column(String(100), nullable=False)
     address: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     store_image_url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
-    verification_status: Mapped[SellerStatus] = mapped_column(Enum(SellerStatus), default=SellerStatus.PENDING)
+    verification_status: Mapped[SellerStatus] = mapped_column(
+        Enum(SellerStatus, values_callable=lambda x: [e.value for e in x]), 
+        default=SellerStatus.PENDING
+    )
     open_time: Mapped[Optional[time]] = mapped_column(Time, nullable=True)
     close_time: Mapped[Optional[time]] = mapped_column(Time, nullable=True)
     is_accepting_orders: Mapped[bool] = mapped_column(Boolean, default=True)
