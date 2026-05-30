@@ -21,9 +21,11 @@ class UserCreate(UserBase):
 
 class UserUpdate(BaseModel):
     name: Optional[str] = None
+    phone_number: Optional[str] = None
     address: Optional[str] = None
     profile_image_url: Optional[str] = None
     is_accepting_orders: Optional[bool] = None
+    store_name: Optional[str] = None
 
     model_config = ConfigDict(
         alias_generator=to_camel,
