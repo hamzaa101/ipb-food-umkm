@@ -31,7 +31,7 @@ class ProductService:
         if not product or product.seller_id != seller_id:
             return None
         
-        update_data = product_in.dict(exclude_unset=True)
+        update_data = product_in.model_dump(exclude_unset=True)
         for field, value in update_data.items():
             setattr(product, field, value)
             
